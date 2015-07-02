@@ -1,0 +1,18 @@
+{
+  "name": "ClipperLib",
+  "version": "6.1.3.2",
+  "description": "Boolean operations and offsetting library in Javascript",
+  "files": [
+    "clipper.js"
+  ],
+  "main": "clipper",
+  "repository": "git://github.com/junmer/ClipperLib",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": [{
+    "name": "junmer",
+    "email": "junmer@foxmail.com"
+  }],
+  "license": "http://www.boost.org/LICENSE_1_0.txt"
+}
