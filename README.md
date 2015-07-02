@@ -41,9 +41,9 @@ Algorithms, Graphics
 
 ## Links
 
-- [Documentaion](./Documentaion.md)
+- [Documentation](./Documentation.md)
 - [ChangeLog](./ChangeLog.txt)
 
 ## License
 
-[Boost Software License (BSL1.0)]()
+[Boost Software License (BSL1.0)](http://www.boost.org/LICENSE_1_0.txt)
