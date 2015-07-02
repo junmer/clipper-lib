@@ -1,6 +1,6 @@
 {
   "name": "clipper-lib",
-  "version": "6.1.3.2",
+  "version": "1.0.0",
   "description": "Boolean operations and offsetting library in Javascript",
   "files": [
     "clipper.js"
