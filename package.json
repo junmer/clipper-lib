@@ -10,9 +10,6 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": [{
-    "name": "junmer",
-    "email": "junmer@foxmail.com"
-  }],
+  "author": ["Angus Johnson (Original library)", "Timo (Translation to JS)", "junmer"],
   "license": "BSL"
 }
