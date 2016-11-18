@@ -83,6 +83,9 @@
   }
   else
   {
+    if (typeof define === 'function' && define.amd) {
+      define(ClipperLib);
+    }
     if (typeof (document) !== "undefined") window.ClipperLib = ClipperLib;
     else self['ClipperLib'] = ClipperLib;
   }
@@ -1792,7 +1795,7 @@
   else self.Int128 = Int128;
   */
 
-  
+
   // ---------------------------------------------
   // Here starts the actual Clipper library:
   // Helper function to support Inheritance in Javascript

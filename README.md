@@ -8,16 +8,16 @@ The Javascript Clipper library performs clipping and offsetting for both lines a
 
 Javascript Clipper is a port of Angus Johnson's Clipper library: <https://sourceforge.net/projects/polyclipping/>
 
-LIVE DEMO: <http://jsclipper.sourceforge.net/6.1.3.2/main_demo.html>
+LIVE DEMO: <http://jsclipper.sourceforge.net/6.2.1.0/main_demo.html>
 
 Information and examples:
-<http://jsclipper.sourceforge.net/6.1.3.2/>
+<http://jsclipper.sourceforge.net/6.2.1.0/>
 
 Donate Javascript Clipper Project: <https://sourceforge.net/p/jsclipper/wiki/Donations/>
 
 Use cases:
 * Over 1500 schools in the UK uses Javascript Clipper in Digimap for Schools service. Digimap for Schools is an online mapping service for use by teachers and pupils. Read more:
-<https://mobilegeo.wordpress.com/>  and
+<https://mobilegeo.wordpress.com/> and
 <http://digimapforschools.edina.ac.uk/cosmo-free/osmapper>
 
 [Javascript Clipper Web Site](https://sourceforge.net/p/jsclipper/wiki/)
