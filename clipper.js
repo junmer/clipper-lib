@@ -5599,7 +5599,7 @@
 			var outRec = this.m_PolyOuts[i];
 			if (outRec.Pts == null || outRec.FirstLeft == null)
 				continue;
-			var firstLeft = this.ParseFirstLeft(outRec.FirstLeft);
+			var firstLeft = ClipperLib.Clipper.ParseFirstLeft(outRec.FirstLeft);
 			if (firstLeft == OldOutRec)
 			{
         if (this.Poly2ContainsPoly1(outRec.Pts, NewOutRec.Pts))
