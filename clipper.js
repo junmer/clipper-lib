@@ -6523,14 +6523,7 @@
   };
   ClipperLib.Error = function (message)
   {
-    try
-    {
-      throw new Error(message);
-    }
-    catch (err)
-    {
-      alert(err.message);
-    }
+    throw new Error(message);
   };
   // ---------------------------------
   // JS extension by Timo 2013
