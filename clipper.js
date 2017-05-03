@@ -2148,10 +2148,11 @@
     }
     if(dataPt2) {
       Object.keys(dataPt2).forEach(key => {
-        if(dataRes[key] instanceof Array) {
-          dataRes[key].push(...dataPt2[key]);
-        }else {
+        if(dataRes[key]=== undefined || !(dataRes[key] instanceof Array)) {
           dastaRes[key] = dataPt2[key];
+        }
+        else {
+          dataRes[key].push(...dataPt2[key]);
         }
       });
     }
