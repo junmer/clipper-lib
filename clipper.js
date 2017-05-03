@@ -2050,13 +2050,7 @@
       {
         this.X = a[0];
         this.Y = a[1];
-        if(a[2] instanceof Number)
-        {this.Z = a[2];}
-        else
-        {
-          this.data = a[2];
-          console.log("ICI");
-        }
+        this.Z = a[2];
       }
       else if (alen == 2) // public IntPoint(cInt x, cInt y)
       {
@@ -4586,14 +4580,12 @@
           }
           else if (dir == ClipperLib.Direction.dLeftToRight)
           {
-            // debugger;
             var Pt = new ClipperLib.IntPoint(e.Curr.X, horzEdge.Curr.Y);
             Pt.data = ClipperLib.IntPoint.mergeData(e.Curr, horzEdge.Curr);
             this.IntersectEdges(horzEdge, e, Pt);
           }
           else
           {
-            // debugger;
             var Pt = new ClipperLib.IntPoint(e.Curr.X, horzEdge.Curr.Y);
             Pt.data = ClipperLib.IntPoint.mergeData(e.Curr, horzEdge.Curr);
             this.IntersectEdges(e, horzEdge, Pt);
