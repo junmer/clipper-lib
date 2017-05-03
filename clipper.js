@@ -2101,7 +2101,7 @@
         this.Y = a[1];
         this.data = a[2];
       }
-      if (alen == 2) // public IntPoint(cInt X, cInt Y)
+      else if (alen == 2) // public IntPoint(cInt X, cInt Y)
       {
         this.X = a[0];
         this.Y = a[1];
@@ -2142,6 +2142,24 @@
     //return a != b;
     return a.X != b.X || a.Y != b.Y;
   };
+
+  ClipperLib.IntPoint.mergeData = function(a,b){
+    const dataPt1 = a.data;
+    const dataPt2 = b.data;
+    const dataRes= {};
+    Object.keys(dataPt1).forEach(key => {
+      dataRes[key] = dataPt1[key];
+    });
+    Object.keys(dataPt2).forEach(key => {
+      if(dataRes[key] instanceof Array)
+      {
+        dataRes[key].push(...dataPt2[key]);
+      }else{
+        dastaRes[key] = dataPt2[key];
+      }
+    });
+    return dataRes;
+  }
   /*
   ClipperLib.IntPoint.prototype.Equals = function (obj)
   {
@@ -4568,12 +4586,16 @@
           }
           else if (dir == ClipperLib.Direction.dLeftToRight)
           {
+            // debugger;
             var Pt = new ClipperLib.IntPoint(e.Curr.X, horzEdge.Curr.Y);
+            Pt.data = ClipperLib.IntPoint.mergeData(e.Curr, horzEdge.Curr);
             this.IntersectEdges(horzEdge, e, Pt);
           }
           else
           {
+            // debugger;
             var Pt = new ClipperLib.IntPoint(e.Curr.X, horzEdge.Curr.Y);
+            Pt.data = ClipperLib.IntPoint.mergeData(e.Curr, horzEdge.Curr);
             this.IntersectEdges(e, horzEdge, Pt);
           }
           this.SwapPositionsInAEL(horzEdge, e);
@@ -6038,7 +6060,7 @@
       {
         var p = new Array(polyCnt);
         for (var j = 0, jlen = pattern.length, ip = pattern[j]; j < jlen; j++, ip = pattern[j])
-          p[j] = new ClipperLib.IntPoint(path[i].X + ip.X, path[i].Y + ip.Y);
+          p[j] = new ClipperLib.IntPoint(path[i].X + ip.X, path[i].Y + ip.Y,path[i].data);
         result.push(p);
       }
     else
@@ -6046,7 +6068,7 @@
       {
         var p = new Array(polyCnt);
         for (var j = 0, jlen = pattern.length, ip = pattern[j]; j < jlen; j++, ip = pattern[j])
-          p[j] = new ClipperLib.IntPoint(path[i].X - ip.X, path[i].Y - ip.Y);
+          p[j] = new ClipperLib.IntPoint(path[i].X - ip.X, path[i].Y - ip.Y, path[i].data);
         result.push(p);
       }
     var quads = new Array();
@@ -6102,7 +6124,7 @@
 	{
 		var outPath = new ClipperLib.Path();
 		for (var i = 0; i < path.length; i++)
-			outPath.push(new ClipperLib.IntPoint(path[i].X + delta.X, path[i].Y + delta.Y));
+			outPath.push(new ClipperLib.IntPoint(path[i].X + delta.X, path[i].Y + delta.Y, path[i].data));
 		return outPath;
 	}
 	//------------------------------------------------------------------------------
