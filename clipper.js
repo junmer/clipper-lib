@@ -2141,17 +2141,20 @@
     const dataPt1 = a.data;
     const dataPt2 = b.data;
     const dataRes= {};
-    Object.keys(dataPt1).forEach(key => {
-      dataRes[key] = dataPt1[key];
-    });
-    Object.keys(dataPt2).forEach(key => {
-      if(dataRes[key] instanceof Array)
-      {
-        dataRes[key].push(...dataPt2[key]);
-      }else{
-        dastaRes[key] = dataPt2[key];
-      }
-    });
+    if(dataPt1) {
+      Object.keys(dataPt1).forEach(key => {
+        dataRes[key] = dataPt1[key];
+      });
+    }
+    if(dataPt2) {
+      Object.keys(dataPt2).forEach(key => {
+        if(dataRes[key] instanceof Array) {
+          dataRes[key].push(...dataPt2[key]);
+        }else {
+          dastaRes[key] = dataPt2[key];
+        }
+      });
+    }
     return dataRes;
   }
   /*
