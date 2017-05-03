@@ -1858,6 +1858,8 @@
   {
     this.X = dp.X;
     this.Y = dp.Y;
+    this.data = dp.data;
+
   };
   // This is internal faster function when called with 2 arguments (x and y)
   ClipperLib.DoublePoint2 = function (x, y)
@@ -2037,11 +2039,24 @@
     if (use_xyz)
     {
       this.Z = 0;
-      if (alen == 3) // public IntPoint(cInt x, cInt y, cInt z = 0)
+      if (alen == 4) // public IntPoint(cInt x, cInt y, cInt z = 0)
       {
         this.X = a[0];
         this.Y = a[1];
         this.Z = a[2];
+        this.data = a[3];
+      }
+      if (alen == 3) // public IntPoint(cInt x, cInt y, cInt z = 0)
+      {
+        this.X = a[0];
+        this.Y = a[1];
+        if(a[2] instanceof Number)
+        {this.Z = a[2];}
+        else
+        {
+          this.data = a[2];
+          console.log("ICI");
+        }
       }
       else if (alen == 2) // public IntPoint(cInt x, cInt y)
       {
@@ -2057,6 +2072,8 @@
           this.X = ClipperLib.Clipper.Round(dp.X);
           this.Y = ClipperLib.Clipper.Round(dp.Y);
           this.Z = 0;
+          this.data = dp.data;
+
         }
         else // public IntPoint(IntPoint pt)
         {
@@ -2065,6 +2082,8 @@
           this.X = pt.X;
           this.Y = pt.Y;
           this.Z = pt.Z;
+          this.data = pt.data;
+
         }
       }
       else // public IntPoint()
@@ -2076,6 +2095,12 @@
     }
     else // if (!use_xyz)
     {
+      if (alen == 3) // public IntPoint(cInt X, cInt Y)
+      {
+        this.X = a[0];
+        this.Y = a[1];
+        this.data = a[2];
+      }
       if (alen == 2) // public IntPoint(cInt X, cInt Y)
       {
         this.X = a[0];
@@ -2088,12 +2113,16 @@
           var dp = a[0];
           this.X = ClipperLib.Clipper.Round(dp.X);
           this.Y = ClipperLib.Clipper.Round(dp.Y);
+          this.data = dp.data;
+
         }
         else // public IntPoint(IntPoint pt)
         {
           var pt = a[0];
           this.X = pt.X;
           this.Y = pt.Y;
+          this.data = pt.data;
+
         }
       }
       else // public IntPoint(IntPoint pt)
@@ -2140,12 +2169,16 @@
       this.X = pt.X;
       this.Y = pt.Y;
       this.Z = pt.Z;
+      this.data = pt.data;
+
     };
     ClipperLib.IntPoint1dp = function (dp)
     {
       this.X = ClipperLib.Clipper.Round(dp.X);
       this.Y = ClipperLib.Clipper.Round(dp.Y);
       this.Z = 0;
+      this.data = dp.data;
+
     };
     ClipperLib.IntPoint2 = function (x, y)
     {
@@ -2171,11 +2204,15 @@
     {
       this.X = pt.X;
       this.Y = pt.Y;
+      this.data = pt.data;
+
     };
     ClipperLib.IntPoint1dp = function (dp)
     {
       this.X = ClipperLib.Clipper.Round(dp.X);
       this.Y = ClipperLib.Clipper.Round(dp.Y);
+      this.data = dp.data;
+
     };
     ClipperLib.IntPoint2 = function (x, y)
     {
@@ -2519,6 +2556,8 @@
     //e.Curr = pt;
     e.Curr.X = pt.X;
     e.Curr.Y = pt.Y;
+    e.Curr.data = pt.data;
+
     e.OutIdx = -1;
   };
   ClipperLib.ClipperBase.prototype.InitEdge2 = function (e, polyType)
@@ -2528,18 +2567,26 @@
       //e.Bot = e.Curr;
       e.Bot.X = e.Curr.X;
       e.Bot.Y = e.Curr.Y;
+      e.Bot.data = e.Curr.data;
+
       //e.Top = e.Next.Curr;
       e.Top.X = e.Next.Curr.X;
       e.Top.Y = e.Next.Curr.Y;
+      e.Top.data = e.Next.Curr.data;
+
     }
     else
     {
       //e.Top = e.Curr;
       e.Top.X = e.Curr.X;
       e.Top.Y = e.Curr.Y;
+      e.Top.data = e.Curr.data;
+
       //e.Bot = e.Next.Curr;
       e.Bot.X = e.Next.Curr.X;
       e.Bot.Y = e.Next.Curr.Y;
+      e.Bot.data = e.Next.Curr.data;
+
     }
     this.SetDx(e);
     e.PolyTyp = polyType;
@@ -2727,6 +2774,8 @@
     //edges[1].Curr = pg[1];
     edges[1].Curr.X = pg[1].X;
     edges[1].Curr.Y = pg[1].Y;
+    edges[1].Curr.data = pg[1].data;
+
 
     var $1 = {Value: this.m_UseFullRange};
     this.RangeTest(pg[0], $1);
@@ -2982,6 +3031,8 @@
         //e.Curr = e.Bot;
         e.Curr.X = e.Bot.X;
         e.Curr.Y = e.Bot.Y;
+        e.Curr.data = e.Bot.data;
+
         e.Side = ClipperLib.EdgeSide.esLeft;
         e.OutIdx = ClipperLib.ClipperBase.Unassigned;
       }
@@ -2991,6 +3042,8 @@
         //e.Curr = e.Bot;
         e.Curr.X = e.Bot.X;
         e.Curr.Y = e.Bot.Y;
+        e.Curr.data = e.Bot.data;
+
         e.Side = ClipperLib.EdgeSide.esRight;
         e.OutIdx = ClipperLib.ClipperBase.Unassigned;
       }
@@ -3260,6 +3313,7 @@
     //j.OffPt = OffPt;
     j.OffPt.X = OffPt.X;
     j.OffPt.Y = OffPt.Y;
+    j.data = OffPt.data;
     this.m_Joins.push(j);
   };
   ClipperLib.Clipper.prototype.AddGhostJoin = function (Op, OffPt)
@@ -3269,6 +3323,7 @@
     //j.OffPt = OffPt;
     j.OffPt.X = OffPt.X;
     j.OffPt.Y = OffPt.Y;
+    j.data = OffPt.data;
     this.m_GhostJoins.push(j);
   };
   if (use_xyz)
@@ -3836,6 +3891,7 @@
       //newOp.Pt = pt;
       newOp.Pt.X = pt.X;
       newOp.Pt.Y = pt.Y;
+      newOp.Pt.data = pt.data;
       newOp.Next = newOp;
       newOp.Prev = newOp;
       if (!outRec.IsOpen)
@@ -3858,6 +3914,7 @@
       //newOp.Pt = pt;
       newOp.Pt.X = pt.X;
       newOp.Pt.Y = pt.Y;
+      newOp.Pt.data = pt.data;
       newOp.Next = op;
       newOp.Prev = op.Prev;
       newOp.Prev.Next = newOp;
@@ -3873,9 +3930,11 @@
     //pt1.Value = pt2.Value;
     pt1.Value.X = pt2.Value.X;
     pt1.Value.Y = pt2.Value.Y;
+    pt1.Value.data = pt2.Value.data;
     //pt2.Value = tmp;
     pt2.Value.X = tmp.X;
     pt2.Value.Y = tmp.Y;
+    pt2.Value.data = tmp.data;
   };
   ClipperLib.Clipper.prototype.HorzSegmentsOverlap = function (seg1a, seg1b, seg2a, seg2b)
 	{
@@ -4421,6 +4480,7 @@
     //    e.Curr = e.Bot;
     e.Curr.X = e.Bot.X;
     e.Curr.Y = e.Bot.Y;
+    e.Curr.data = e.Bot.data;
     e.PrevInAEL = AelPrev;
     e.NextInAEL = AelNext;
     if (!ClipperLib.ClipperBase.IsHorizontal(e))
@@ -4663,6 +4723,8 @@
           //newNode.Pt = pt;
           newNode.Pt.X = pt.X;
           newNode.Pt.Y = pt.Y;
+          newNode.Pt.data = pt.data;
+
           this.m_IntersectList.push(newNode);
           this.SwapPositionsInSEL(e, eNext);
           isModified = true;
@@ -5110,6 +5172,8 @@
     //result.Pt = outPt.Pt;
     result.Pt.X = outPt.Pt.X;
     result.Pt.Y = outPt.Pt.Y;
+    result.Pt.data = outPt.Pt.data;
+
     result.Idx = outPt.Idx;
     if (InsertAfter)
     {
@@ -5182,6 +5246,8 @@
         //op1.Pt = Pt;
         op1.Pt.X = Pt.X;
         op1.Pt.Y = Pt.Y;
+        op1.Pt.data = Pt.data;
+
         op1b = this.DupOutPt(op1, !DiscardLeft);
       }
     }
@@ -5199,6 +5265,8 @@
         //op1.Pt = Pt;
         op1.Pt.X = Pt.X;
         op1.Pt.Y = Pt.Y;
+        op1.Pt.data = Pt.data;
+
         op1b = this.DupOutPt(op1, DiscardLeft);
       }
     }
@@ -5216,6 +5284,8 @@
         //op2.Pt = Pt;
         op2.Pt.X = Pt.X;
         op2.Pt.Y = Pt.Y;
+        op2.Pt.data = Pt.data;
+
         op2b = this.DupOutPt(op2, !DiscardLeft);
       }
     }
@@ -5233,6 +5303,7 @@
         //op2.Pt = Pt;
         op2.Pt.X = Pt.X;
         op2.Pt.Y = Pt.Y;
+        op2.Pt.data = Pt.data;
         op2b = this.DupOutPt(op2, DiscardLeft);
       }
     }
@@ -5345,6 +5416,7 @@
         //Pt = op1.Pt;
         Pt.X = op1.Pt.X;
         Pt.Y = op1.Pt.Y;
+        Pt.data = op1.Pt.data;
         DiscardLeftSide = (op1.Pt.X > op1b.Pt.X);
       }
       else if (op2.Pt.X >= Left && op2.Pt.X <= Right)
@@ -5352,6 +5424,7 @@
         //Pt = op2.Pt;
         Pt.X = op2.Pt.X;
         Pt.Y = op2.Pt.Y;
+        Pt.data = op2.Pt.data;
         DiscardLeftSide = (op2.Pt.X > op2b.Pt.X);
       }
       else if (op1b.Pt.X >= Left && op1b.Pt.X <= Right)
@@ -5359,6 +5432,7 @@
         //Pt = op1b.Pt;
         Pt.X = op1b.Pt.X;
         Pt.Y = op1b.Pt.Y;
+        Pt.data = op1b.Pt.data;
         DiscardLeftSide = op1b.Pt.X > op1.Pt.X;
       }
       else
@@ -5366,6 +5440,7 @@
         //Pt = op2b.Pt;
         Pt.X = op2b.Pt.X;
         Pt.Y = op2b.Pt.Y;
+        Pt.data = op2b.Pt.data;
         DiscardLeftSide = (op2b.Pt.X > op2.Pt.X);
       }
       j.OutPt1 = op1;
