@@ -6792,7 +6792,8 @@
           poly.push(
           {
             X: poly[0].X,
-            Y: poly[0].Y
+            Y: poly[0].Y,
+            data: poly[0].data
           });
           plen = poly.length;
         }
@@ -6834,18 +6835,21 @@
         poly2.push(
         {
           X: poly[0].X,
-          Y: poly[0].Y
+          Y: poly[0].Y,
+          data: poly[0].data
         });
         for (j = 1; j < plen - 1; j++)
           if (!rem[j]) poly2.push(
           {
             X: poly[j].X,
-            Y: poly[j].Y
+            Y: poly[j].Y,
+            data: poly[j].data
           });
         poly2.push(
         {
           X: poly[plen - 1].X,
-          Y: poly[plen - 1].Y
+          Y: poly[plen - 1].Y,
+          data: poly[plen - 1].data
         });
         // if the first point was added to the end, remove it
         if (addlast) poly.pop();
