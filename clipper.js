@@ -6745,7 +6745,8 @@
       {
         result[j] = {
           X: polygon[i][j].X,
-          Y: polygon[i][j].Y
+          Y: polygon[i][j].Y,
+          data: polygon[i][j].data
         };
       }
       results[i] = result;
