@@ -11,7 +11,9 @@
     "compile": "browserify helper/index.js -o compiled-helper/bundle.js -t [ babelify --presets [ es2015 ] ] -s holes",
     "compiledraw": "browserify tests/draw-helper/index.js -o tests/draw-helper/bundle.js -s draw",
     "test": "npm run compile && mocha tests/unitarytests.js",
-    "watchify": "watchify helper/index.js -o compiled-helper/bundle.js -v"
+    "watchify": "watchify helper/index.js -o compiled-helper/bundle.js -v",
+    "watchifydraw": "watchify helper/index.js -o compiled-helper/bundle.js -t babelify -s holes"
+
   },
   "author": [
     "Angus Johnson (Original library)",
