@@ -1858,7 +1858,7 @@
   {
     this.X = dp.X;
     this.Y = dp.Y;
-    this.data = dp.data;
+    this._data = dp.data;
   };
   // This is internal faster function when called with 2 arguments (x and y)
   ClipperLib.DoublePoint2 = function (x, y)
@@ -2031,7 +2031,8 @@
   ClipperLib.PI2 = 2 * 3.141592653589793;
   ClipperLib.IntPoint = function ()
   {
-    Object.defineProperty(this, "data", { set: function (x) {
+    Object.defineProperty(this, "_data", { set: function (x) {
+      this.data = x;
       ClipperLib.IntPoint.testDebug(this);
     } });
 
@@ -2070,7 +2071,7 @@
           this.X = ClipperLib.Clipper.Round(dp.X);
           this.Y = ClipperLib.Clipper.Round(dp.Y);
           this.Z = 0;
-          this.data = dp.data;
+          this._data = dp.data;
 
         }
         else // public IntPoint(IntPoint pt)
@@ -2080,7 +2081,7 @@
           this.X = pt.X;
           this.Y = pt.Y;
           this.Z = pt.Z;
-          this.data = pt.data;
+          this._data = pt.data;
 
         }
       }
@@ -2111,7 +2112,7 @@
           var dp = a[0];
           this.X = ClipperLib.Clipper.Round(dp.X);
           this.Y = ClipperLib.Clipper.Round(dp.Y);
-          this.data = dp.data;
+          this._data = dp.data;
 
         }
         else // public IntPoint(IntPoint pt)
@@ -2119,7 +2120,7 @@
           var pt = a[0];
           this.X = pt.X;
           this.Y = pt.Y;
-          this.data = pt.data;
+          this._data = pt.data;
 
         }
       }
@@ -2212,7 +2213,7 @@
       this.X = pt.X;
       this.Y = pt.Y;
       this.Z = pt.Z;
-      this.data = pt.data;
+      this._data = pt.data;
       ClipperLib.IntPoint.testDebug(pt);
 
     };
@@ -2221,7 +2222,7 @@
       this.X = ClipperLib.Clipper.Round(dp.X);
       this.Y = ClipperLib.Clipper.Round(dp.Y);
       this.Z = 0;
-      this.data = dp.data;
+      this._data = dp.data;
       ClipperLib.IntPoint.testDebug(dp);
 
     };
@@ -2249,7 +2250,7 @@
     {
       this.X = pt.X;
       this.Y = pt.Y;
-      this.data = pt.data;
+      this._data = pt.data;
       ClipperLib.IntPoint.testDebug(pt);
 
     };
@@ -2257,7 +2258,7 @@
     {
       this.X = ClipperLib.Clipper.Round(dp.X);
       this.Y = ClipperLib.Clipper.Round(dp.Y);
-      this.data = dp.data;
+      this._data = dp.data;
       ClipperLib.IntPoint.testDebug(dp);
 
     };
@@ -2604,7 +2605,7 @@
     //e.Curr = pt;
     e.Curr.X = pt.X;
     e.Curr.Y = pt.Y;
-    e.Curr.data = pt.data;
+    e.Curr._data = pt.data;
     e.OutIdx = -1;
     ClipperLib.IntPoint.testDebug(e.Curr);
 
@@ -2616,24 +2617,24 @@
       //e.Bot = e.Curr;
       e.Bot.X = e.Curr.X;
       e.Bot.Y = e.Curr.Y;
-      e.Bot.data = e.Curr.data;
+      e.Bot._data = e.Curr.data;
 
       //e.Top = e.Next.Curr;
       e.Top.X = e.Next.Curr.X;
       e.Top.Y = e.Next.Curr.Y;
-      e.Top.data = e.Next.Curr.data;
+      e.Top._data = e.Next.Curr.data;
     }
     else
     {
       //e.Top = e.Curr;
       e.Top.X = e.Curr.X;
       e.Top.Y = e.Curr.Y;
-      e.Top.data = e.Curr.data;
+      e.Top._data = e.Curr.data;
 
       //e.Bot = e.Next.Curr;
       e.Bot.X = e.Next.Curr.X;
       e.Bot.Y = e.Next.Curr.Y;
-      e.Bot.data = e.Next.Curr.data;
+      e.Bot._data = e.Next.Curr.data;
 
     }
     ClipperLib.IntPoint.testDebug(e.Bot);
@@ -2825,7 +2826,7 @@
     //edges[1].Curr = pg[1];
     edges[1].Curr.X = pg[1].X;
     edges[1].Curr.Y = pg[1].Y;
-    edges[1].Curr.data = pg[1].data;
+    edges[1].Curr._data = pg[1].data;
     ClipperLib.IntPoint.testDebug(edges[1].Curr);
 
     var $1 = {Value: this.m_UseFullRange};
@@ -3082,7 +3083,7 @@
         //e.Curr = e.Bot;
         e.Curr.X = e.Bot.X;
         e.Curr.Y = e.Bot.Y;
-        e.Curr.data = e.Bot.data;
+        e.Curr._data = e.Bot.data;
         ClipperLib.IntPoint.testDebug(e.Curr);
         e.Side = ClipperLib.EdgeSide.esLeft;
         e.OutIdx = ClipperLib.ClipperBase.Unassigned;
@@ -3093,7 +3094,7 @@
         //e.Curr = e.Bot;
         e.Curr.X = e.Bot.X;
         e.Curr.Y = e.Bot.Y;
-        e.Curr.data = e.Bot.data;
+        e.Curr._data = e.Bot.data;
         ClipperLib.IntPoint.testDebug(e.Curr);
 
         e.Side = ClipperLib.EdgeSide.esRight;
@@ -3366,7 +3367,7 @@
     //j.OffPt = OffPt;
     j.OffPt.X = OffPt.X;
     j.OffPt.Y = OffPt.Y;
-    j.OffPt.data = OffPt.data;
+    j.OffPt._data = OffPt.data;
     ClipperLib.IntPoint.testDebug(j.OffPt);
 
     this.m_Joins.push(j);
@@ -3378,7 +3379,7 @@
     //j.OffPt = OffPt;
     j.OffPt.X = OffPt.X;
     j.OffPt.Y = OffPt.Y;
-    j.OffPt.data = OffPt.data;
+    j.OffPt._data = OffPt.data;
     ClipperLib.IntPoint.testDebug(j.OffPt);
 
     this.m_GhostJoins.push(j);
@@ -3948,7 +3949,7 @@
       //newOp.Pt = pt;
       newOp.Pt.X = pt.X;
       newOp.Pt.Y = pt.Y;
-      newOp.Pt.data = pt.data;
+      newOp.Pt._data = pt.data;
       ClipperLib.IntPoint.testDebug(newOp.Pt);
 
       newOp.Next = newOp;
@@ -3973,7 +3974,7 @@
       //newOp.Pt = pt;
       newOp.Pt.X = pt.X;
       newOp.Pt.Y = pt.Y;
-      newOp.Pt.data = pt.data;
+      newOp.Pt._data = pt.data;
       ClipperLib.IntPoint.testDebug(newOp.Pt);
 
       newOp.Next = op;
@@ -3991,14 +3992,14 @@
     //pt1.Value = pt2.Value;
     pt1.Value.X = pt2.Value.X;
     pt1.Value.Y = pt2.Value.Y;
-    pt1.Value.data = pt2.Value.data;
+    pt1.Value._data = pt2.Value.data;
     ClipperLib.IntPoint.testDebug(pt1.Value);
 
     //pt2.Value = tmp;
 
     pt2.Value.X = tmp.X;
     pt2.Value.Y = tmp.Y;
-    pt2.Value.data = tmp.data;
+    pt2.Value._data = tmp.data;
     ClipperLib.IntPoint.testDebug(pt2.Value);
 
   };
@@ -4546,7 +4547,7 @@
     //    e.Curr = e.Bot;
     e.Curr.X = e.Bot.X;
     e.Curr.Y = e.Bot.Y;
-    e.Curr.data = e.Bot.data;
+    e.Curr._data = e.Bot.data;
     ClipperLib.IntPoint.testDebug(e.Curr);
 
     e.PrevInAEL = AelPrev;
@@ -4793,7 +4794,7 @@
           //newNode.Pt = pt;
           newNode.Pt.X = pt.X;
           newNode.Pt.Y = pt.Y;
-          newNode.Pt.data = e.Curr.data;
+          newNode.Pt._data = e.Curr.data;
           ClipperLib.IntPoint.testDebug(newNode.Pt);
 
           this.m_IntersectList.push(newNode);
@@ -5243,7 +5244,7 @@
     //result.Pt = outPt.Pt;
     result.Pt.X = outPt.Pt.X;
     result.Pt.Y = outPt.Pt.Y;
-    result.Pt.data = outPt.Pt.data;
+    result.Pt._data = outPt.Pt.data;
     ClipperLib.IntPoint.testDebug(result.Pt);
 
     result.Idx = outPt.Idx;
@@ -5318,7 +5319,7 @@
         //op1.Pt = Pt;
         op1.Pt.X = Pt.X;
         op1.Pt.Y = Pt.Y;
-        op1.Pt.data = Pt.data;
+        op1.Pt._data = Pt.data;
         ClipperLib.IntPoint.testDebug(op1.Pt);
 
         op1b = this.DupOutPt(op1, !DiscardLeft);
@@ -5338,7 +5339,7 @@
         //op1.Pt = Pt;
         op1.Pt.X = Pt.X;
         op1.Pt.Y = Pt.Y;
-        op1.Pt.data = Pt.data;
+        op1.Pt._data = Pt.data;
         ClipperLib.IntPoint.testDebug(op1.Pt);
 
         op1b = this.DupOutPt(op1, DiscardLeft);
@@ -5358,7 +5359,7 @@
         //op2.Pt = Pt;
         op2.Pt.X = Pt.X;
         op2.Pt.Y = Pt.Y;
-        op2.Pt.data = Pt.data;
+        op2.Pt._data = Pt.data;
         ClipperLib.IntPoint.testDebug(op2.Pt);
 
         op2b = this.DupOutPt(op2, !DiscardLeft);
@@ -5378,7 +5379,7 @@
         //op2.Pt = Pt;
         op2.Pt.X = Pt.X;
         op2.Pt.Y = Pt.Y;
-        op2.Pt.data = Pt.data;
+        op2.Pt._data = Pt.data;
         ClipperLib.IntPoint.testDebug(op2.Pt);
 
         op2b = this.DupOutPt(op2, DiscardLeft);
@@ -5493,7 +5494,7 @@
         //Pt = op1.Pt;
         Pt.X = op1.Pt.X;
         Pt.Y = op1.Pt.Y;
-        Pt.data = op1.Pt.data;
+        Pt._data = op1.Pt.data;
 
         DiscardLeftSide = (op1.Pt.X > op1b.Pt.X);
       }
@@ -5502,7 +5503,7 @@
         //Pt = op2.Pt;
         Pt.X = op2.Pt.X;
         Pt.Y = op2.Pt.Y;
-        Pt.data = op2.Pt.data;
+        Pt._data = op2.Pt.data;
         DiscardLeftSide = (op2.Pt.X > op2b.Pt.X);
       }
       else if (op1b.Pt.X >= Left && op1b.Pt.X <= Right)
@@ -5510,7 +5511,7 @@
         //Pt = op1b.Pt;
         Pt.X = op1b.Pt.X;
         Pt.Y = op1b.Pt.Y;
-        Pt.data = op1b.Pt.data;
+        Pt._data = op1b.Pt.data;
         DiscardLeftSide = op1b.Pt.X > op1.Pt.X;
       }
       else
@@ -5518,7 +5519,7 @@
         //Pt = op2b.Pt;
         Pt.X = op2b.Pt.X;
         Pt.Y = op2b.Pt.Y;
-        Pt.data = op2b.Pt.data;
+        Pt._data = op2b.Pt.data;
         DiscardLeftSide = (op2b.Pt.X > op2.Pt.X);
       }
       ClipperLib.IntPoint.testDebug(Pt);
