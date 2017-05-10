@@ -2031,6 +2031,10 @@
   ClipperLib.PI2 = 2 * 3.141592653589793;
   ClipperLib.IntPoint = function ()
   {
+    Object.defineProperty(this, "data", { set: function (x) {
+      ClipperLib.IntPoint.testDebug(this);
+    } });
+
     var a = arguments,
       alen = a.length;
     this.X = 0;
@@ -2125,7 +2129,20 @@
         this.Y = 0;
       }
     }
+    ClipperLib.IntPoint.testDebug(this);
   };
+  ClipperLib.IntPoint.testDebug = function (pt){
+    if( (pt.X !== 0 || pt.Y !== 0 ) && pt.data === undefined ){
+      debugger;
+    }
+
+      if(pt.X=== 53297&& pt.Y===-38718){
+          if(pt.data && pt.data.parent ==="3"){
+            debugger;
+          }
+      }
+
+  }
   ClipperLib.IntPoint.op_Equality = function (a, b)
   {
     //return a == b;
@@ -2136,7 +2153,6 @@
     //return a != b;
     return a.X != b.X || a.Y != b.Y;
   };
-
 
     ClipperLib.IntPoint.mergeData = function(a,b, pt){
       const dataPt1 = a.data;
@@ -2197,6 +2213,7 @@
       this.Y = pt.Y;
       this.Z = pt.Z;
       this.data = pt.data;
+      ClipperLib.IntPoint.testDebug(pt);
 
     };
     ClipperLib.IntPoint1dp = function (dp)
@@ -2205,6 +2222,7 @@
       this.Y = ClipperLib.Clipper.Round(dp.Y);
       this.Z = 0;
       this.data = dp.data;
+      ClipperLib.IntPoint.testDebug(dp);
 
     };
     ClipperLib.IntPoint2 = function (x, y)
@@ -2232,6 +2250,7 @@
       this.X = pt.X;
       this.Y = pt.Y;
       this.data = pt.data;
+      ClipperLib.IntPoint.testDebug(pt);
 
     };
     ClipperLib.IntPoint1dp = function (dp)
@@ -2239,6 +2258,7 @@
       this.X = ClipperLib.Clipper.Round(dp.X);
       this.Y = ClipperLib.Clipper.Round(dp.Y);
       this.data = dp.data;
+      ClipperLib.IntPoint.testDebug(dp);
 
     };
     ClipperLib.IntPoint2 = function (x, y)
@@ -2246,6 +2266,7 @@
       this.X = x;
       this.Y = y;
     };
+
   }
   ClipperLib.IntRect = function ()
   {
@@ -2585,6 +2606,8 @@
     e.Curr.Y = pt.Y;
     e.Curr.data = pt.data;
     e.OutIdx = -1;
+    ClipperLib.IntPoint.testDebug(e.Curr);
+
   };
   ClipperLib.ClipperBase.prototype.InitEdge2 = function (e, polyType)
   {
@@ -2613,6 +2636,9 @@
       e.Bot.data = e.Next.Curr.data;
 
     }
+    ClipperLib.IntPoint.testDebug(e.Bot);
+    ClipperLib.IntPoint.testDebug(e.Top);
+
     this.SetDx(e);
     e.PolyTyp = polyType;
   };
@@ -2800,6 +2826,7 @@
     edges[1].Curr.X = pg[1].X;
     edges[1].Curr.Y = pg[1].Y;
     edges[1].Curr.data = pg[1].data;
+    ClipperLib.IntPoint.testDebug(edges[1].Curr);
 
     var $1 = {Value: this.m_UseFullRange};
     this.RangeTest(pg[0], $1);
@@ -3056,7 +3083,7 @@
         e.Curr.X = e.Bot.X;
         e.Curr.Y = e.Bot.Y;
         e.Curr.data = e.Bot.data;
-
+        ClipperLib.IntPoint.testDebug(e.Curr);
         e.Side = ClipperLib.EdgeSide.esLeft;
         e.OutIdx = ClipperLib.ClipperBase.Unassigned;
       }
@@ -3067,6 +3094,7 @@
         e.Curr.X = e.Bot.X;
         e.Curr.Y = e.Bot.Y;
         e.Curr.data = e.Bot.data;
+        ClipperLib.IntPoint.testDebug(e.Curr);
 
         e.Side = ClipperLib.EdgeSide.esRight;
         e.OutIdx = ClipperLib.ClipperBase.Unassigned;
@@ -3339,6 +3367,8 @@
     j.OffPt.X = OffPt.X;
     j.OffPt.Y = OffPt.Y;
     j.OffPt.data = OffPt.data;
+    ClipperLib.IntPoint.testDebug(j.OffPt);
+
     this.m_Joins.push(j);
   };
   ClipperLib.Clipper.prototype.AddGhostJoin = function (Op, OffPt)
@@ -3349,6 +3379,8 @@
     j.OffPt.X = OffPt.X;
     j.OffPt.Y = OffPt.Y;
     j.OffPt.data = OffPt.data;
+    ClipperLib.IntPoint.testDebug(j.OffPt);
+
     this.m_GhostJoins.push(j);
   };
   if (use_xyz)
@@ -3917,6 +3949,8 @@
       newOp.Pt.X = pt.X;
       newOp.Pt.Y = pt.Y;
       newOp.Pt.data = pt.data;
+      ClipperLib.IntPoint.testDebug(newOp.Pt);
+
       newOp.Next = newOp;
       newOp.Prev = newOp;
       if (!outRec.IsOpen)
@@ -3940,6 +3974,7 @@
       newOp.Pt.X = pt.X;
       newOp.Pt.Y = pt.Y;
       newOp.Pt.data = pt.data;
+      ClipperLib.IntPoint.testDebug(newOp.Pt);
 
       newOp.Next = op;
       newOp.Prev = op.Prev;
@@ -3957,11 +3992,14 @@
     pt1.Value.X = pt2.Value.X;
     pt1.Value.Y = pt2.Value.Y;
     pt1.Value.data = pt2.Value.data;
+    ClipperLib.IntPoint.testDebug(pt1.Value);
+
     //pt2.Value = tmp;
 
     pt2.Value.X = tmp.X;
     pt2.Value.Y = tmp.Y;
     pt2.Value.data = tmp.data;
+    ClipperLib.IntPoint.testDebug(pt2.Value);
 
   };
   ClipperLib.Clipper.prototype.HorzSegmentsOverlap = function (seg1a, seg1b, seg2a, seg2b)
@@ -4509,6 +4547,7 @@
     e.Curr.X = e.Bot.X;
     e.Curr.Y = e.Bot.Y;
     e.Curr.data = e.Bot.data;
+    ClipperLib.IntPoint.testDebug(e.Curr);
 
     e.PrevInAEL = AelPrev;
     e.NextInAEL = AelNext;
@@ -4755,6 +4794,7 @@
           newNode.Pt.X = pt.X;
           newNode.Pt.Y = pt.Y;
           newNode.Pt.data = e.Curr.data;
+          ClipperLib.IntPoint.testDebug(newNode.Pt);
 
           this.m_IntersectList.push(newNode);
           this.SwapPositionsInSEL(e, eNext);
@@ -5204,6 +5244,7 @@
     result.Pt.X = outPt.Pt.X;
     result.Pt.Y = outPt.Pt.Y;
     result.Pt.data = outPt.Pt.data;
+    ClipperLib.IntPoint.testDebug(result.Pt);
 
     result.Idx = outPt.Idx;
     if (InsertAfter)
@@ -5278,6 +5319,8 @@
         op1.Pt.X = Pt.X;
         op1.Pt.Y = Pt.Y;
         op1.Pt.data = Pt.data;
+        ClipperLib.IntPoint.testDebug(op1.Pt);
+
         op1b = this.DupOutPt(op1, !DiscardLeft);
       }
     }
@@ -5296,6 +5339,8 @@
         op1.Pt.X = Pt.X;
         op1.Pt.Y = Pt.Y;
         op1.Pt.data = Pt.data;
+        ClipperLib.IntPoint.testDebug(op1.Pt);
+
         op1b = this.DupOutPt(op1, DiscardLeft);
       }
     }
@@ -5314,6 +5359,8 @@
         op2.Pt.X = Pt.X;
         op2.Pt.Y = Pt.Y;
         op2.Pt.data = Pt.data;
+        ClipperLib.IntPoint.testDebug(op2.Pt);
+
         op2b = this.DupOutPt(op2, !DiscardLeft);
       }
     }
@@ -5332,6 +5379,8 @@
         op2.Pt.X = Pt.X;
         op2.Pt.Y = Pt.Y;
         op2.Pt.data = Pt.data;
+        ClipperLib.IntPoint.testDebug(op2.Pt);
+
         op2b = this.DupOutPt(op2, DiscardLeft);
       }
     }
@@ -5445,6 +5494,7 @@
         Pt.X = op1.Pt.X;
         Pt.Y = op1.Pt.Y;
         Pt.data = op1.Pt.data;
+
         DiscardLeftSide = (op1.Pt.X > op1b.Pt.X);
       }
       else if (op2.Pt.X >= Left && op2.Pt.X <= Right)
@@ -5471,6 +5521,8 @@
         Pt.data = op2b.Pt.data;
         DiscardLeftSide = (op2b.Pt.X > op2.Pt.X);
       }
+      ClipperLib.IntPoint.testDebug(Pt);
+
       j.OutPt1 = op1;
       j.OutPt2 = op2;
       return this.JoinHorz(op1, op1b, op2, op2b, Pt, DiscardLeftSide);
@@ -6077,6 +6129,11 @@
           p[j] = new ClipperLib.IntPoint(path[i].X - ip.X, path[i].Y - ip.Y, path[i].data);
         result.push(p);
       }
+
+    for(let i in p){
+            ClipperLib.IntPoint.testDebug(p[i]);
+    }
+
     var quads = new Array();
     for (var i = 0; i < pathCnt - 1 + delta; i++)
       for (var j = 0; j < polyCnt; j++)
@@ -6131,6 +6188,11 @@
 		var outPath = new ClipperLib.Path();
 		for (var i = 0; i < path.length; i++)
 			outPath.push(new ClipperLib.IntPoint(path[i].X + delta.X, path[i].Y + delta.Y, path[i].data));
+
+        for(let i in outPath){
+                ClipperLib.IntPoint.testDebug(outPath[i]);
+        }
+
 		return outPath;
 	}
 	//------------------------------------------------------------------------------
@@ -6311,6 +6373,7 @@
         if (node.m_endtype == ClipperLib.EndType.etClosedPolygon)
           this.m_destPolys.push(node.m_polygon);
       }
+
       return;
     }
     //see offset_triginometry3.svg in the documentation folder ...
@@ -6354,6 +6417,8 @@
             var X2 = X;
             X = X * this.m_cos - this.m_sin * Y;
             Y = X2 * this.m_sin + Y * this.m_cos;
+            ClipperLib.IntPoint.testDebug(this.m_destPoly[this.m_destPoly.length-1]);
+
           }
         }
         else
@@ -6364,6 +6429,8 @@
           {
             this.m_destPoly.push(new ClipperLib.IntPoint(ClipperLib.ClipperOffset.Round(this.m_srcPoly[0].X + X * delta),
              ClipperLib.ClipperOffset.Round(this.m_srcPoly[0].Y + Y * delta),this.m_srcPoly[0].data));
+             ClipperLib.IntPoint.testDebug(this.m_destPoly[this.m_destPoly.length-1]);
+
             if (X < 0)
               X = 1;
             else if (Y < 0)
@@ -6404,6 +6471,10 @@
          this.m_normals[j] = new ClipperLib.DoublePoint(-this.m_normals[j - 1].X, -this.m_normals[j - 1].Y, this.m_normals[j - 1].data);
         this.m_normals[0] = new ClipperLib.DoublePoint(-n.X, -n.Y,n.data);
 
+        for(let k in this.m_normals){
+          ClipperLib.IntPoint.testDebug(this.m_normals[k]);
+        }
+
         k = 0;
         for (var j = len - 1; j >= 0; j--)
           k = this.OffsetPoint(j, k, node.m_jointype);
@@ -6421,9 +6492,12 @@
           pt1 = new ClipperLib.IntPoint(ClipperLib.ClipperOffset.Round(this.m_srcPoly[j].X + this.m_normals[j].X * delta),
           ClipperLib.ClipperOffset.Round(this.m_srcPoly[j].Y + this.m_normals[j].Y * delta),this.m_srcPoly[j].data);
           this.m_destPoly.push(pt1);
+          ClipperLib.IntPoint.testDebug(pt1);
           pt1 = new ClipperLib.IntPoint(ClipperLib.ClipperOffset.Round(this.m_srcPoly[j].X - this.m_normals[j].X * delta),
            ClipperLib.ClipperOffset.Round(this.m_srcPoly[j].Y - this.m_normals[j].Y * delta),this.m_srcPoly[j].data);
           this.m_destPoly.push(pt1);
+          ClipperLib.IntPoint.testDebug(pt1);
+
         }
         else
         {
@@ -6441,6 +6515,10 @@
            this.m_normals[j] = new ClipperLib.DoublePoint(-this.m_normals[j - 1].X, -this.m_normals[j - 1].Y, this.m_normals[j-1].data);
         this.m_normals[0] = new ClipperLib.DoublePoint(-this.m_normals[1].X, -this.m_normals[1].Y, this.m_normals[1].data);
 
+        for(let k in this.m_normals){
+          ClipperLib.IntPoint.testDebug(this.m_normals[k]);
+        }
+
         k = len - 1;
         for (var j = k - 1; j > 0; --j)
           k = this.OffsetPoint(j, k, node.m_jointype);
@@ -6448,11 +6526,14 @@
         {
           pt1 = new ClipperLib.IntPoint(ClipperLib.ClipperOffset.Round(this.m_srcPoly[0].X - this.m_normals[0].X * delta),
            ClipperLib.ClipperOffset.Round(this.m_srcPoly[0].Y - this.m_normals[0].Y * delta),this.m_srcPoly[0].data);
-
           this.m_destPoly.push(pt1);
+          ClipperLib.IntPoint.testDebug(pt1);
+
           pt1 = new ClipperLib.IntPoint(ClipperLib.ClipperOffset.Round(this.m_srcPoly[0].X + this.m_normals[0].X * delta),
            ClipperLib.ClipperOffset.Round(this.m_srcPoly[0].Y + this.m_normals[0].Y * delta),this.m_srcPoly[0].data);
           this.m_destPoly.push(pt1);
+          ClipperLib.IntPoint.testDebug(pt1);
+
         }
         else
         {
@@ -6556,6 +6637,8 @@
 
 				this.m_destPoly.push(new ClipperLib.IntPoint(ClipperLib.ClipperOffset.Round(this.m_srcPoly[j].X + this.m_normals[k].X * this.m_delta),
 					ClipperLib.ClipperOffset.Round(this.m_srcPoly[j].Y + this.m_normals[k].Y * this.m_delta),this.m_srcPoly[j].data));
+          ClipperLib.IntPoint.testDebug(this.m_destPoly[this.m_destPoly.length-1]);
+
 				return k;
 			}
 			//else angle ==> 180 degrees
@@ -6569,10 +6652,15 @@
 
       this.m_destPoly.push(new ClipperLib.IntPoint(ClipperLib.ClipperOffset.Round(this.m_srcPoly[j].X + this.m_normals[k].X * this.m_delta),
         ClipperLib.ClipperOffset.Round(this.m_srcPoly[j].Y + this.m_normals[k].Y * this.m_delta),this.m_srcPoly[j].data));
+        ClipperLib.IntPoint.testDebug(this.m_destPoly[this.m_destPoly.length-1]);
 
       this.m_destPoly.push(new ClipperLib.IntPoint(this.m_srcPoly[j]));
+      ClipperLib.IntPoint.testDebug(this.m_destPoly[this.m_destPoly.length-1]);
+
       this.m_destPoly.push(new ClipperLib.IntPoint(ClipperLib.ClipperOffset.Round(this.m_srcPoly[j].X + this.m_normals[j].X * this.m_delta),
         ClipperLib.ClipperOffset.Round(this.m_srcPoly[j].Y + this.m_normals[j].Y * this.m_delta),this.m_srcPoly[j].data));
+        ClipperLib.IntPoint.testDebug(this.m_destPoly[this.m_destPoly.length-1]);
+
     }
     else
       switch (jointype)
@@ -6610,6 +6698,10 @@
       ClipperLib.ClipperOffset.Round(this.m_srcPoly[j].X + this.m_delta * (this.m_normals[j].X + this.m_normals[j].Y * dx)),
       ClipperLib.ClipperOffset.Round(this.m_srcPoly[j].Y + this.m_delta * (this.m_normals[j].Y - this.m_normals[j].X * dx)),
       this.m_srcPoly[j].data));
+
+      ClipperLib.IntPoint.testDebug(this.m_destPoly[this.m_destPoly.length-2]);
+      ClipperLib.IntPoint.testDebug(this.m_destPoly[this.m_destPoly.length-1]);
+
   };
   ClipperLib.ClipperOffset.prototype.DoMiter = function (j, k, r)
   {
@@ -6619,6 +6711,8 @@
       ClipperLib.ClipperOffset.Round(this.m_srcPoly[j].X + (this.m_normals[k].X + this.m_normals[j].X) * q),
       ClipperLib.ClipperOffset.Round(this.m_srcPoly[j].Y + (this.m_normals[k].Y + this.m_normals[j].Y) * q),
       this.m_srcPoly[j].data));
+      ClipperLib.IntPoint.testDebug(this.m_destPoly[this.m_destPoly.length-1]);
+
   };
   ClipperLib.ClipperOffset.prototype.DoRound = function (j, k)
   {
@@ -6640,11 +6734,15 @@
       X2 = X;
       X = X * this.m_cos - this.m_sin * Y;
       Y = X2 * this.m_sin + Y * this.m_cos;
+      ClipperLib.IntPoint.testDebug(this.m_destPoly[this.m_destPoly.length-1]);
+
     }
     this.m_destPoly.push(new ClipperLib.IntPoint(
       ClipperLib.ClipperOffset.Round(this.m_srcPoly[j].X + this.m_normals[j].X * this.m_delta),
       ClipperLib.ClipperOffset.Round(this.m_srcPoly[j].Y + this.m_normals[j].Y * this.m_delta),
       this.m_srcPoly[j].data));
+      ClipperLib.IntPoint.testDebug(this.m_destPoly[this.m_destPoly.length-1]);
+
   };
   ClipperLib.Error = function (message)
   {

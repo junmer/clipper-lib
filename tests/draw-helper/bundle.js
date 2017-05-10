@@ -1860,8 +1860,6 @@
     this.X = dp.X;
     this.Y = dp.Y;
     this.data = dp.data;
-    if(!dp.data){console.log("52");}
-
   };
   // This is internal faster function when called with 2 arguments (x and y)
   ClipperLib.DoublePoint2 = function (x, y)
@@ -2034,6 +2032,10 @@
   ClipperLib.PI2 = 2 * 3.141592653589793;
   ClipperLib.IntPoint = function ()
   {
+    Object.defineProperty(this, "data", { set: function (x) {
+      ClipperLib.IntPoint.testDebug(this);
+    } });
+
     var a = arguments,
       alen = a.length;
     this.X = 0;
@@ -2128,7 +2130,20 @@
         this.Y = 0;
       }
     }
+    ClipperLib.IntPoint.testDebug(this);
   };
+  ClipperLib.IntPoint.testDebug = function (pt){
+    if( (pt.X !== 0 || pt.Y !== 0 ) && pt.data === undefined ){
+      debugger;
+    }
+
+      if(pt.X=== 53297&& pt.Y===-38718){
+          if(pt.data && pt.data.parent ==="3"){
+            debugger;
+          }
+      }
+
+  }
   ClipperLib.IntPoint.op_Equality = function (a, b)
   {
     //return a == b;
@@ -2139,7 +2154,6 @@
     //return a != b;
     return a.X != b.X || a.Y != b.Y;
   };
-
 
     ClipperLib.IntPoint.mergeData = function(a,b, pt){
       const dataPt1 = a.data;
@@ -2200,6 +2214,7 @@
       this.Y = pt.Y;
       this.Z = pt.Z;
       this.data = pt.data;
+      ClipperLib.IntPoint.testDebug(pt);
 
     };
     ClipperLib.IntPoint1dp = function (dp)
@@ -2208,6 +2223,7 @@
       this.Y = ClipperLib.Clipper.Round(dp.Y);
       this.Z = 0;
       this.data = dp.data;
+      ClipperLib.IntPoint.testDebug(dp);
 
     };
     ClipperLib.IntPoint2 = function (x, y)
@@ -2235,6 +2251,7 @@
       this.X = pt.X;
       this.Y = pt.Y;
       this.data = pt.data;
+      ClipperLib.IntPoint.testDebug(pt);
 
     };
     ClipperLib.IntPoint1dp = function (dp)
@@ -2242,6 +2259,7 @@
       this.X = ClipperLib.Clipper.Round(dp.X);
       this.Y = ClipperLib.Clipper.Round(dp.Y);
       this.data = dp.data;
+      ClipperLib.IntPoint.testDebug(dp);
 
     };
     ClipperLib.IntPoint2 = function (x, y)
@@ -2249,6 +2267,7 @@
       this.X = x;
       this.Y = y;
     };
+
   }
   ClipperLib.IntRect = function ()
   {
@@ -2587,9 +2606,9 @@
     e.Curr.X = pt.X;
     e.Curr.Y = pt.Y;
     e.Curr.data = pt.data;
-      if(!pt.data){console.log("1");}
-
     e.OutIdx = -1;
+    ClipperLib.IntPoint.testDebug(e.Curr);
+
   };
   ClipperLib.ClipperBase.prototype.InitEdge2 = function (e, polyType)
   {
@@ -2604,8 +2623,6 @@
       e.Top.X = e.Next.Curr.X;
       e.Top.Y = e.Next.Curr.Y;
       e.Top.data = e.Next.Curr.data;
-      if(!e.Next.Curr.data){console.log("2");}
-
     }
     else
     {
@@ -2618,9 +2635,11 @@
       e.Bot.X = e.Next.Curr.X;
       e.Bot.Y = e.Next.Curr.Y;
       e.Bot.data = e.Next.Curr.data;
-      if(!e.Next.Curr.data){console.log("3");}
 
     }
+    ClipperLib.IntPoint.testDebug(e.Bot);
+    ClipperLib.IntPoint.testDebug(e.Top);
+
     this.SetDx(e);
     e.PolyTyp = polyType;
   };
@@ -2808,8 +2827,7 @@
     edges[1].Curr.X = pg[1].X;
     edges[1].Curr.Y = pg[1].Y;
     edges[1].Curr.data = pg[1].data;
-    if(!pg[1].data){console.log("5");}
-
+    ClipperLib.IntPoint.testDebug(edges[1].Curr);
 
     var $1 = {Value: this.m_UseFullRange};
     this.RangeTest(pg[0], $1);
@@ -3066,7 +3084,7 @@
         e.Curr.X = e.Bot.X;
         e.Curr.Y = e.Bot.Y;
         e.Curr.data = e.Bot.data;
-
+        ClipperLib.IntPoint.testDebug(e.Curr);
         e.Side = ClipperLib.EdgeSide.esLeft;
         e.OutIdx = ClipperLib.ClipperBase.Unassigned;
       }
@@ -3077,13 +3095,13 @@
         e.Curr.X = e.Bot.X;
         e.Curr.Y = e.Bot.Y;
         e.Curr.data = e.Bot.data;
+        ClipperLib.IntPoint.testDebug(e.Curr);
 
         e.Side = ClipperLib.EdgeSide.esRight;
         e.OutIdx = ClipperLib.ClipperBase.Unassigned;
       }
       lm = lm.Next;
     }
-    if(!e.Bot.data){console.log("6");}
 
   };
   ClipperLib.Clipper = function (InitOptions) // public Clipper(int InitOptions = 0)
@@ -3350,7 +3368,7 @@
     j.OffPt.X = OffPt.X;
     j.OffPt.Y = OffPt.Y;
     j.OffPt.data = OffPt.data;
-    if(!OffPt.data){console.log("7");}
+    ClipperLib.IntPoint.testDebug(j.OffPt);
 
     this.m_Joins.push(j);
   };
@@ -3362,7 +3380,7 @@
     j.OffPt.X = OffPt.X;
     j.OffPt.Y = OffPt.Y;
     j.OffPt.data = OffPt.data;
-    if(!OffPt.data){console.log("8");}
+    ClipperLib.IntPoint.testDebug(j.OffPt);
 
     this.m_GhostJoins.push(j);
   };
@@ -3932,7 +3950,7 @@
       newOp.Pt.X = pt.X;
       newOp.Pt.Y = pt.Y;
       newOp.Pt.data = pt.data;
-      if(!newOp.Pt.data){console.log("9");}
+      ClipperLib.IntPoint.testDebug(newOp.Pt);
 
       newOp.Next = newOp;
       newOp.Prev = newOp;
@@ -3957,7 +3975,7 @@
       newOp.Pt.X = pt.X;
       newOp.Pt.Y = pt.Y;
       newOp.Pt.data = pt.data;
-      if(!newOp.Pt.data){console.log("10");debugger;}
+      ClipperLib.IntPoint.testDebug(newOp.Pt);
 
       newOp.Next = op;
       newOp.Prev = op.Prev;
@@ -3975,14 +3993,14 @@
     pt1.Value.X = pt2.Value.X;
     pt1.Value.Y = pt2.Value.Y;
     pt1.Value.data = pt2.Value.data;
+    ClipperLib.IntPoint.testDebug(pt1.Value);
+
     //pt2.Value = tmp;
-    if(!pt2.Value.data){console.log("11");}
 
     pt2.Value.X = tmp.X;
     pt2.Value.Y = tmp.Y;
     pt2.Value.data = tmp.data;
-    if(!tmp.data){console.log("12");}
-
+    ClipperLib.IntPoint.testDebug(pt2.Value);
 
   };
   ClipperLib.Clipper.prototype.HorzSegmentsOverlap = function (seg1a, seg1b, seg2a, seg2b)
@@ -4530,7 +4548,7 @@
     e.Curr.X = e.Bot.X;
     e.Curr.Y = e.Bot.Y;
     e.Curr.data = e.Bot.data;
-    if(!e.Bot.data){console.log("13");}
+    ClipperLib.IntPoint.testDebug(e.Curr);
 
     e.PrevInAEL = AelPrev;
     e.NextInAEL = AelNext;
@@ -4777,7 +4795,7 @@
           newNode.Pt.X = pt.X;
           newNode.Pt.Y = pt.Y;
           newNode.Pt.data = e.Curr.data;
-          if(!e.Curr.data){console.log("15");}
+          ClipperLib.IntPoint.testDebug(newNode.Pt);
 
           this.m_IntersectList.push(newNode);
           this.SwapPositionsInSEL(e, eNext);
@@ -5227,7 +5245,7 @@
     result.Pt.X = outPt.Pt.X;
     result.Pt.Y = outPt.Pt.Y;
     result.Pt.data = outPt.Pt.data;
-    if(!outPt.Pt.data){console.log("17");}
+    ClipperLib.IntPoint.testDebug(result.Pt);
 
     result.Idx = outPt.Idx;
     if (InsertAfter)
@@ -5302,7 +5320,7 @@
         op1.Pt.X = Pt.X;
         op1.Pt.Y = Pt.Y;
         op1.Pt.data = Pt.data;
-        if(!Pt.data){console.log("18");}
+        ClipperLib.IntPoint.testDebug(op1.Pt);
 
         op1b = this.DupOutPt(op1, !DiscardLeft);
       }
@@ -5322,7 +5340,7 @@
         op1.Pt.X = Pt.X;
         op1.Pt.Y = Pt.Y;
         op1.Pt.data = Pt.data;
-        if(!Pt.data){console.log("19");}
+        ClipperLib.IntPoint.testDebug(op1.Pt);
 
         op1b = this.DupOutPt(op1, DiscardLeft);
       }
@@ -5342,7 +5360,7 @@
         op2.Pt.X = Pt.X;
         op2.Pt.Y = Pt.Y;
         op2.Pt.data = Pt.data;
-        if(!Pt.data){console.log("20");}
+        ClipperLib.IntPoint.testDebug(op2.Pt);
 
         op2b = this.DupOutPt(op2, !DiscardLeft);
       }
@@ -5362,7 +5380,7 @@
         op2.Pt.X = Pt.X;
         op2.Pt.Y = Pt.Y;
         op2.Pt.data = Pt.data;
-        if(!Pt.data){console.log("21");}
+        ClipperLib.IntPoint.testDebug(op2.Pt);
 
         op2b = this.DupOutPt(op2, DiscardLeft);
       }
@@ -5477,7 +5495,6 @@
         Pt.X = op1.Pt.X;
         Pt.Y = op1.Pt.Y;
         Pt.data = op1.Pt.data;
-        if(!op1.Pt.data){console.log("22");}
 
         DiscardLeftSide = (op1.Pt.X > op1b.Pt.X);
       }
@@ -5487,8 +5504,6 @@
         Pt.X = op2.Pt.X;
         Pt.Y = op2.Pt.Y;
         Pt.data = op2.Pt.data;
-        if(!op2.Pt.data){console.log("23");}
-
         DiscardLeftSide = (op2.Pt.X > op2b.Pt.X);
       }
       else if (op1b.Pt.X >= Left && op1b.Pt.X <= Right)
@@ -5497,8 +5512,6 @@
         Pt.X = op1b.Pt.X;
         Pt.Y = op1b.Pt.Y;
         Pt.data = op1b.Pt.data;
-        if(!op1b.Pt.data){console.log("24");}
-
         DiscardLeftSide = op1b.Pt.X > op1.Pt.X;
       }
       else
@@ -5507,10 +5520,10 @@
         Pt.X = op2b.Pt.X;
         Pt.Y = op2b.Pt.Y;
         Pt.data = op2b.Pt.data;
-        if(!op2b.Pt.data){console.log("25");}
-
         DiscardLeftSide = (op2b.Pt.X > op2.Pt.X);
       }
+      ClipperLib.IntPoint.testDebug(Pt);
+
       j.OutPt1 = op1;
       j.OutPt2 = op2;
       return this.JoinHorz(op1, op1b, op2, op2b, Pt, DiscardLeftSide);
@@ -6107,8 +6120,6 @@
         var p = new Array(polyCnt);
         for (var j = 0, jlen = pattern.length, ip = pattern[j]; j < jlen; j++, ip = pattern[j])
           p[j] = new ClipperLib.IntPoint(path[i].X + ip.X, path[i].Y + ip.Y,path[i].data);
-          if(!path[i].data){console.log("27");}
-
         result.push(p);
       }
     else
@@ -6117,10 +6128,13 @@
         var p = new Array(polyCnt);
         for (var j = 0, jlen = pattern.length, ip = pattern[j]; j < jlen; j++, ip = pattern[j])
           p[j] = new ClipperLib.IntPoint(path[i].X - ip.X, path[i].Y - ip.Y, path[i].data);
-          if(!path[i].data){console.log("28");}
-
         result.push(p);
       }
+
+    for(let i in p){
+            ClipperLib.IntPoint.testDebug(p[i]);
+    }
+
     var quads = new Array();
     for (var i = 0; i < pathCnt - 1 + delta; i++)
       for (var j = 0; j < polyCnt; j++)
@@ -6175,7 +6189,10 @@
 		var outPath = new ClipperLib.Path();
 		for (var i = 0; i < path.length; i++)
 			outPath.push(new ClipperLib.IntPoint(path[i].X + delta.X, path[i].Y + delta.Y, path[i].data));
-      if(!path[i].data){console.log("29");}
+
+        for(let i in outPath){
+                ClipperLib.IntPoint.testDebug(outPath[i]);
+        }
 
 		return outPath;
 	}
@@ -6357,6 +6374,7 @@
         if (node.m_endtype == ClipperLib.EndType.etClosedPolygon)
           this.m_destPolys.push(node.m_polygon);
       }
+
       return;
     }
     //see offset_triginometry3.svg in the documentation folder ...
@@ -6397,11 +6415,11 @@
           {
             this.m_destPoly.push(new ClipperLib.IntPoint(ClipperLib.ClipperOffset.Round(this.m_srcPoly[0].X + X * delta),
              ClipperLib.ClipperOffset.Round(this.m_srcPoly[0].Y + Y * delta),this.m_srcPoly[0].data));
-             if(!this.m_srcPoly[0].data){console.log("30");}
-
             var X2 = X;
             X = X * this.m_cos - this.m_sin * Y;
             Y = X2 * this.m_sin + Y * this.m_cos;
+            ClipperLib.IntPoint.testDebug(this.m_destPoly[this.m_destPoly.length-1]);
+
           }
         }
         else
@@ -6412,7 +6430,7 @@
           {
             this.m_destPoly.push(new ClipperLib.IntPoint(ClipperLib.ClipperOffset.Round(this.m_srcPoly[0].X + X * delta),
              ClipperLib.ClipperOffset.Round(this.m_srcPoly[0].Y + Y * delta),this.m_srcPoly[0].data));
-             if(!this.m_srcPoly[0].data){console.log("30");}
+             ClipperLib.IntPoint.testDebug(this.m_destPoly[this.m_destPoly.length-1]);
 
             if (X < 0)
               X = 1;
@@ -6451,12 +6469,12 @@
         //re-build m_normals ...
         var n = this.m_normals[len - 1];
         for (var j = len - 1; j > 0; j--)
-        {  this.m_normals[j] = new ClipperLib.DoublePoint(-this.m_normals[j - 1].X, -this.m_normals[j - 1].Y, this.m_normals[j - 1].data );
-          if(!this.m_normals[j - 1].data){console.log("31");}
-
-        }
+         this.m_normals[j] = new ClipperLib.DoublePoint(-this.m_normals[j - 1].X, -this.m_normals[j - 1].Y, this.m_normals[j - 1].data);
         this.m_normals[0] = new ClipperLib.DoublePoint(-n.X, -n.Y,n.data);
-        if(!n.data){console.log("32");}
+
+        for(let k in this.m_normals){
+          ClipperLib.IntPoint.testDebug(this.m_normals[k]);
+        }
 
         k = 0;
         for (var j = len - 1; j >= 0; j--)
@@ -6475,11 +6493,11 @@
           pt1 = new ClipperLib.IntPoint(ClipperLib.ClipperOffset.Round(this.m_srcPoly[j].X + this.m_normals[j].X * delta),
           ClipperLib.ClipperOffset.Round(this.m_srcPoly[j].Y + this.m_normals[j].Y * delta),this.m_srcPoly[j].data);
           this.m_destPoly.push(pt1);
+          ClipperLib.IntPoint.testDebug(pt1);
           pt1 = new ClipperLib.IntPoint(ClipperLib.ClipperOffset.Round(this.m_srcPoly[j].X - this.m_normals[j].X * delta),
            ClipperLib.ClipperOffset.Round(this.m_srcPoly[j].Y - this.m_normals[j].Y * delta),this.m_srcPoly[j].data);
           this.m_destPoly.push(pt1);
-          if(!this.m_srcPoly[j].data){console.log("33");}
-          if(!this.m_srcPoly[j].data){console.log("34");}
+          ClipperLib.IntPoint.testDebug(pt1);
 
         }
         else
@@ -6488,8 +6506,6 @@
           k = len - 2;
           this.m_sinA = 0;
           this.m_normals[j] = new ClipperLib.DoublePoint(-this.m_normals[j].X, -this.m_normals[j].Y, this.m_normals[j].data);
-          if(!this.m_normals[j].data){console.log("35");}
-
           if (node.m_endtype == ClipperLib.EndType.etOpenSquare)
             this.DoSquare(j, k);
           else
@@ -6497,12 +6513,12 @@
         }
         //re-build m_normals ...
         for (var j = len - 1; j > 0; j--)
-        {  this.m_normals[j] = new ClipperLib.DoublePoint(-this.m_normals[j - 1].X, -this.m_normals[j - 1].Y, this.m_normals[j-1].data);
-          if(!this.m_normals[j - 1].data){console.log("36");}
-
-        }
+           this.m_normals[j] = new ClipperLib.DoublePoint(-this.m_normals[j - 1].X, -this.m_normals[j - 1].Y, this.m_normals[j-1].data);
         this.m_normals[0] = new ClipperLib.DoublePoint(-this.m_normals[1].X, -this.m_normals[1].Y, this.m_normals[1].data);
-        if(!this.m_normals[0].data){console.log("37");}
+
+        for(let k in this.m_normals){
+          ClipperLib.IntPoint.testDebug(this.m_normals[k]);
+        }
 
         k = len - 1;
         for (var j = k - 1; j > 0; --j)
@@ -6511,14 +6527,14 @@
         {
           pt1 = new ClipperLib.IntPoint(ClipperLib.ClipperOffset.Round(this.m_srcPoly[0].X - this.m_normals[0].X * delta),
            ClipperLib.ClipperOffset.Round(this.m_srcPoly[0].Y - this.m_normals[0].Y * delta),this.m_srcPoly[0].data);
-           if(!this.m_srcPoly[0].data){console.log("38");}
-
           this.m_destPoly.push(pt1);
+          ClipperLib.IntPoint.testDebug(pt1);
+
           pt1 = new ClipperLib.IntPoint(ClipperLib.ClipperOffset.Round(this.m_srcPoly[0].X + this.m_normals[0].X * delta),
            ClipperLib.ClipperOffset.Round(this.m_srcPoly[0].Y + this.m_normals[0].Y * delta),this.m_srcPoly[0].data);
-           if(!this.m_srcPoly[0].data){console.log("39");}
-
           this.m_destPoly.push(pt1);
+          ClipperLib.IntPoint.testDebug(pt1);
+
         }
         else
         {
@@ -6622,7 +6638,7 @@
 
 				this.m_destPoly.push(new ClipperLib.IntPoint(ClipperLib.ClipperOffset.Round(this.m_srcPoly[j].X + this.m_normals[k].X * this.m_delta),
 					ClipperLib.ClipperOffset.Round(this.m_srcPoly[j].Y + this.m_normals[k].Y * this.m_delta),this.m_srcPoly[j].data));
-          if(!this.m_srcPoly[j].data){console.log("40");}
+          ClipperLib.IntPoint.testDebug(this.m_destPoly[this.m_destPoly.length-1]);
 
 				return k;
 			}
@@ -6637,12 +6653,14 @@
 
       this.m_destPoly.push(new ClipperLib.IntPoint(ClipperLib.ClipperOffset.Round(this.m_srcPoly[j].X + this.m_normals[k].X * this.m_delta),
         ClipperLib.ClipperOffset.Round(this.m_srcPoly[j].Y + this.m_normals[k].Y * this.m_delta),this.m_srcPoly[j].data));
-        if(!this.m_srcPoly[j].data){console.log("41");}
+        ClipperLib.IntPoint.testDebug(this.m_destPoly[this.m_destPoly.length-1]);
 
       this.m_destPoly.push(new ClipperLib.IntPoint(this.m_srcPoly[j]));
+      ClipperLib.IntPoint.testDebug(this.m_destPoly[this.m_destPoly.length-1]);
+
       this.m_destPoly.push(new ClipperLib.IntPoint(ClipperLib.ClipperOffset.Round(this.m_srcPoly[j].X + this.m_normals[j].X * this.m_delta),
         ClipperLib.ClipperOffset.Round(this.m_srcPoly[j].Y + this.m_normals[j].Y * this.m_delta),this.m_srcPoly[j].data));
-        if(!this.m_srcPoly[j].data){console.log("42");}
+        ClipperLib.IntPoint.testDebug(this.m_destPoly[this.m_destPoly.length-1]);
 
     }
     else
@@ -6676,13 +6694,14 @@
       ClipperLib.ClipperOffset.Round(this.m_srcPoly[j].X + this.m_delta * (this.m_normals[k].X - this.m_normals[k].Y * dx)),
       ClipperLib.ClipperOffset.Round(this.m_srcPoly[j].Y + this.m_delta * (this.m_normals[k].Y + this.m_normals[k].X * dx)),
       this.m_srcPoly[j].data));
-      if(!this.m_srcPoly[j].data){console.log("42");}
 
     this.m_destPoly.push(new ClipperLib.IntPoint(
       ClipperLib.ClipperOffset.Round(this.m_srcPoly[j].X + this.m_delta * (this.m_normals[j].X + this.m_normals[j].Y * dx)),
       ClipperLib.ClipperOffset.Round(this.m_srcPoly[j].Y + this.m_delta * (this.m_normals[j].Y - this.m_normals[j].X * dx)),
       this.m_srcPoly[j].data));
-      if(!this.m_srcPoly[j].data){console.log("43");}
+
+      ClipperLib.IntPoint.testDebug(this.m_destPoly[this.m_destPoly.length-2]);
+      ClipperLib.IntPoint.testDebug(this.m_destPoly[this.m_destPoly.length-1]);
 
   };
   ClipperLib.ClipperOffset.prototype.DoMiter = function (j, k, r)
@@ -6693,7 +6712,7 @@
       ClipperLib.ClipperOffset.Round(this.m_srcPoly[j].X + (this.m_normals[k].X + this.m_normals[j].X) * q),
       ClipperLib.ClipperOffset.Round(this.m_srcPoly[j].Y + (this.m_normals[k].Y + this.m_normals[j].Y) * q),
       this.m_srcPoly[j].data));
-      if(!this.m_srcPoly[j].data){console.log("44");}
+      ClipperLib.IntPoint.testDebug(this.m_destPoly[this.m_destPoly.length-1]);
 
   };
   ClipperLib.ClipperOffset.prototype.DoRound = function (j, k)
@@ -6713,17 +6732,17 @@
         ClipperLib.ClipperOffset.Round(this.m_srcPoly[j].X + X * this.m_delta),
         ClipperLib.ClipperOffset.Round(this.m_srcPoly[j].Y + Y * this.m_delta),
         this.m_srcPoly[j].data));
-        if(!this.m_srcPoly[j].data){console.log("45");}
-
       X2 = X;
       X = X * this.m_cos - this.m_sin * Y;
       Y = X2 * this.m_sin + Y * this.m_cos;
+      ClipperLib.IntPoint.testDebug(this.m_destPoly[this.m_destPoly.length-1]);
+
     }
     this.m_destPoly.push(new ClipperLib.IntPoint(
       ClipperLib.ClipperOffset.Round(this.m_srcPoly[j].X + this.m_normals[j].X * this.m_delta),
       ClipperLib.ClipperOffset.Round(this.m_srcPoly[j].Y + this.m_normals[j].Y * this.m_delta),
       this.m_srcPoly[j].data));
-      if(!this.m_srcPoly[j].data){console.log("46");}
+      ClipperLib.IntPoint.testDebug(this.m_destPoly[this.m_destPoly.length-1]);
 
   };
   ClipperLib.Error = function (message)
@@ -6843,8 +6862,6 @@
           Y: polygon[i][j].Y,
           data: polygon[i][j].data
         };
-        if(!polygon[i][j].data){console.log("47");}
-
       }
       results[i] = result;
     }
@@ -6892,8 +6909,6 @@
             Y: poly[0].Y,
             data: poly[0].data
           });
-          if(!poly[0].data){console.log("48");}
-
           plen = poly.length;
         }
         else addlast = 0;
@@ -6937,8 +6952,6 @@
           Y: poly[0].Y,
           data: poly[0].data
         });
-        if(!poly[0].data){console.log("49");}
-
         for (j = 1; j < plen - 1; j++)
         {  if (!rem[j]) poly2.push(
           {
@@ -6946,8 +6959,6 @@
             Y: poly[j].Y,
             data: poly[j].data
           });
-          if(!poly[j].data){console.log("51");}
-
         }
         poly2.push(
         {
@@ -6955,8 +6966,6 @@
           Y: poly[plen - 1].Y,
           data: poly[plen - 1].data
         });
-        if(!poly[plen - 1].data){console.log("50");}
-
         // if the first point was added to the end, remove it
         if (addlast) poly.pop();
         // break, if there was not anymore removed points
@@ -7174,6 +7183,17 @@ getTestResult:function(test, polyTree = false){
   return holegen.executeClipper(test.subj, test.clip, test.operation, polyTree);
 },
 
+_getKazaHoles:function(operation){
+  const paths = JSON.parse('[[{"X":53297,"Y":-74756,"data":{"parent":["ebdd2349-0ecf-4980-892a-16068b33c591"]}},{"X":-13923,"Y":-74756,"data":{"parent":["ebdd2349-0ecf-4980-892a-16068b33c591"]}},{"X":-13903,"Y":-71756,"data":{"parent":["ebdd2349-0ecf-4980-892a-16068b33c591"]}},{"X":50297,"Y":-71756,"data":{"parent":["ebdd2349-0ecf-4980-892a-16068b33c591"]}}],[{"X":53297,"Y":-38718,"data":{"parent":["bd55df47-3d45-4ba3-bcc0-8e8a4ce50a1b"]}},{"X":53297,"Y":-74756,"data":{"parent":["bd55df47-3d45-4ba3-bcc0-8e8a4ce50a1b"]}},{"X":50297,"Y":-71756,"data":{"parent":["bd55df47-3d45-4ba3-bcc0-8e8a4ce50a1b"]}},{"X":50297,"Y":-41718,"data":{"parent":["bd55df47-3d45-4ba3-bcc0-8e8a4ce50a1b"]}}],[{"X":-13913,"Y":-38718,"data":{"parent":["6b0eb408-029c-4236-8a75-cd7249871dfa"]}},{"X":53297,"Y":-38718,"data":{"parent":["6b0eb408-029c-4236-8a75-cd7249871dfa"]}},{"X":50297,"Y":-41718,"data":{"parent":["6b0eb408-029c-4236-8a75-cd7249871dfa"]}},{"X":-10913,"Y":-41718,"data":{"parent":["6b0eb408-029c-4236-8a75-cd7249871dfa"]}}],[{"X":-13913,"Y":-73266,"data":{"parent":["77346c71-4ff0-4837-8046-fc65d749693c"]}},{"X":-13913,"Y":-38718,"data":{"parent":["77346c71-4ff0-4837-8046-fc65d749693c"]}},{"X":-10913,"Y":-41718,"data":{"parent":["77346c71-4ff0-4837-8046-fc65d749693c"]}},{"X":-10913,"Y":-73266,"data":{"parent":["77346c71-4ff0-4837-8046-fc65d749693c"]}}],[{"X":31040,"Y":5403,"data":{"parent":["ad64ef0c-e207-4473-81a1-a8673830022a"]}},{"X":51562,"Y":-5479,"data":{"parent":["ad64ef0c-e207-4473-81a1-a8673830022a"]}},{"X":50156,"Y":-8130,"data":{"parent":["ad64ef0c-e207-4473-81a1-a8673830022a"]}},{"X":31040,"Y":2007,"data":{"parent":["ad64ef0c-e207-4473-81a1-a8673830022a"]}}],[{"X":28050,"Y":-9610,"data":{"parent":["852b2bd7-55cb-40fd-a18d-547873776887"]}},{"X":28050,"Y":14810,"data":{"parent":["852b2bd7-55cb-40fd-a18d-547873776887"]}},{"X":31050,"Y":14810,"data":{"parent":["852b2bd7-55cb-40fd-a18d-547873776887"]}},{"X":31050,"Y":-9610,"data":{"parent":["852b2bd7-55cb-40fd-a18d-547873776887"]}}],[{"X":18750,"Y":22100,"data":{"parent":["33780cc8-03d6-48ac-b99c-255f13474572"]}},{"X":18750,"Y":40010,"data":{"parent":["33780cc8-03d6-48ac-b99c-255f13474572"]}},{"X":21750,"Y":40010,"data":{"parent":["33780cc8-03d6-48ac-b99c-255f13474572"]}},{"X":21750,"Y":19100,"data":{"parent":["33780cc8-03d6-48ac-b99c-255f13474572"]}}],[{"X":-29860,"Y":22100,"data":{"parent":["80fadaf3-a6d1-44a3-a537-9ba98203418a"]}},{"X":18750,"Y":22100,"data":{"parent":["80fadaf3-a6d1-44a3-a537-9ba98203418a"]}},{"X":21750,"Y":19100,"data":{"parent":["80fadaf3-a6d1-44a3-a537-9ba98203418a"]}},{"X":-29860,"Y":19100,"data":{"parent":["80fadaf3-a6d1-44a3-a537-9ba98203418a"]}}],[{"X":-29860,"Y":-18300,"data":{"parent":["c4414e30-7c85-49ff-a106-ab8b7c689e5d"]}},{"X":20260,"Y":-18300,"data":{"parent":["c4414e30-7c85-49ff-a106-ab8b7c689e5d"]}},{"X":20260,"Y":-21300,"data":{"parent":["c4414e30-7c85-49ff-a106-ab8b7c689e5d"]}},{"X":-29860,"Y":-21300,"data":{"parent":["c4414e30-7c85-49ff-a106-ab8b7c689e5d"]}}]]');
+
+  const res ={};
+  for(let i in paths)
+  {
+    res[i] = paths[i];
+  }
+  return res;
+},
+
  _getHoles:function() {
   return {
     hole: [{
@@ -7290,9 +7310,16 @@ _getCombinations:function(holes,operation) {
   }
 },
 
-getData:function(operation){
-  const holes = holegen._getHoles();
+getData:function(operation, fromKaza  = false){
+
+  let holes;
+  if(fromKaza){
+    holes = holegen._getKazaHoles();
+  } else{
+      holes = holegen._getHoles();
+  }
   holegen._appendParrents(holes);
+  console.log("HOLES", holes);
 
   const concatHoles = [];
   for(let i in holes){
@@ -7303,6 +7330,8 @@ getData:function(operation){
   return {holes,concatHoles,tests};
 
 },
+
+
 
 };
 module.exports = holegen;
@@ -14218,6 +14247,7 @@ drawPath:function (ctx, pathToDraw, position) {
 },
 
 checkTest:function ( tests,index,ctxIn,ctxOut){
+  if(index!=2){return}
   const test = tests.tests[index];
     drawscript.drawPaths(ctxIn,test.subj.concat(test.clip));
   let res = holes.getTestResult(test,true);
@@ -14234,30 +14264,10 @@ draw:function (){
     var canvas2 = document.getElementById("canvas2");
     var ctx2= canvas2.getContext('2d');
 
-    const pathsP = JSON.parse('[[[{"X":19551,"Y":-18159,"data":{"parent":["5ab52e45-7b5b-44b5-b568-17c35d630ee7"]}},{"X":26149,"Y":-28290,"data":{"parent":["5ab52e45-7b5b-44b5-b568-17c35d630ee7"]}},{"X":23636,"Y":-29927,"data":{"parent":["5ab52e45-7b5b-44b5-b568-17c35d630ee7"]}},{"X":16261,"Y":-18605,"data":{"parent":["5ab52e45-7b5b-44b5-b568-17c35d630ee7"]}}]],[[{"X":10558,"Y":-16369,"data":{"parent":["9d48c694-7bd0-484c-8501-903f1fbcc350"]}},{"X":10276,"Y":-3477,"data":{"parent":["9d48c694-7bd0-484c-8501-903f1fbcc350"]}},{"X":13276,"Y":-3411,"data":{"parent":["9d48c694-7bd0-484c-8501-903f1fbcc350"]}},{"X":13550,"Y":-15964,"data":{"parent":["9d48c694-7bd0-484c-8501-903f1fbcc350"]}}]],[[{"X":65347,"Y":-60094,"data":{"parent":["d65eb31e-5db2-4fb6-9d2f-1f312a2dd89f"]}},{"X":75357,"Y":-70275,"data":{"parent":["d65eb31e-5db2-4fb6-9d2f-1f312a2dd89f"]}},{"X":73217,"Y":-72378,"data":{"parent":["d65eb31e-5db2-4fb6-9d2f-1f312a2dd89f"]}},{"X":62933,"Y":-61918,"data":{"parent":["d65eb31e-5db2-4fb6-9d2f-1f312a2dd89f"]}}]],[[{"X":40923,"Y":-59865,"data":{"parent":["e5b7d83f-de03-4bf9-b059-82e51cabeeda"]}},{"X":33436,"Y":-63692,"data":{"parent":["e5b7d83f-de03-4bf9-b059-82e51cabeeda"]}},{"X":32071,"Y":-61021,"data":{"parent":["e5b7d83f-de03-4bf9-b059-82e51cabeeda"]}},{"X":39087,"Y":-57434,"data":{"parent":["e5b7d83f-de03-4bf9-b059-82e51cabeeda"]}}]],[[{"X":58820,"Y":-61291,"data":{"parent":["a4a6b823-de77-42f6-9ff2-77e94568bba3"]}},{"X":48053,"Y":-47044,"data":{"parent":["a4a6b823-de77-42f6-9ff2-77e94568bba3"]}},{"X":50446,"Y":-45235,"data":{"parent":["a4a6b823-de77-42f6-9ff2-77e94568bba3"]}},{"X":61213,"Y":-59482,"data":{"parent":["a4a6b823-de77-42f6-9ff2-77e94568bba3"]}}]],[[{"X":21615,"Y":-51083,"data":{"parent":["833514dd-e3a3-42d0-9fd2-66094e56b41f"]}},{"X":14445,"Y":-37492,"data":{"parent":["833514dd-e3a3-42d0-9fd2-66094e56b41f"]}},{"X":17098,"Y":-36092,"data":{"parent":["833514dd-e3a3-42d0-9fd2-66094e56b41f"]}},{"X":24268,"Y":-49683,"data":{"parent":["833514dd-e3a3-42d0-9fd2-66094e56b41f"]}}]],[[{"X":16728,"Y":-57031,"data":{"parent":["4f10e46b-4684-487f-9342-49f0f24e0858"]}},{"X":29071,"Y":-70693,"data":{"parent":["4f10e46b-4684-487f-9342-49f0f24e0858"]}},{"X":26845,"Y":-72704,"data":{"parent":["4f10e46b-4684-487f-9342-49f0f24e0858"]}},{"X":13990,"Y":-58475,"data":{"parent":["4f10e46b-4684-487f-9342-49f0f24e0858"]}}]],[[{"X":-1443,"Y":-58041,"data":{"parent":["356b8694-b843-4327-8876-2984de258af4"]}},{"X":-19967,"Y":-63758,"data":{"parent":["356b8694-b843-4327-8876-2984de258af4"]}},{"X":-20852,"Y":-60892,"data":{"parent":["356b8694-b843-4327-8876-2984de258af4"]}},{"X":-2646,"Y":-55273,"data":{"parent":["356b8694-b843-4327-8876-2984de258af4"]}}]],[[{"X":-5020,"Y":-35204,"data":{"parent":["deffb1c7-baed-46d6-a6d8-bf5318ec0c64"]}},{"X":-27080,"Y":-35204,"data":{"parent":["deffb1c7-baed-46d6-a6d8-bf5318ec0c64"]}},{"X":-27080,"Y":-32204,"data":{"parent":["deffb1c7-baed-46d6-a6d8-bf5318ec0c64"]}},{"X":-5020,"Y":-32204,"data":{"parent":["deffb1c7-baed-46d6-a6d8-bf5318ec0c64"]}}]],[[{"X":67302,"Y":-36164,"data":{"parent":["8d9dd597-d427-4349-81ba-382b4fab7588"]}},{"X":88007,"Y":-32061,"data":{"parent":["8d9dd597-d427-4349-81ba-382b4fab7588"]}},{"X":88590,"Y":-35003,"data":{"parent":["8d9dd597-d427-4349-81ba-382b4fab7588"]}},{"X":67885,"Y":-39107,"data":{"parent":["8d9dd597-d427-4349-81ba-382b4fab7588"]}}]],[[{"X":45402,"Y":-17123,"data":{"parent":["11994a55-38a2-4573-9c75-b0a52005db22"]}},{"X":49965,"Y":3502,"data":{"parent":["11994a55-38a2-4573-9c75-b0a52005db22"]}},{"X":52895,"Y":2854,"data":{"parent":["11994a55-38a2-4573-9c75-b0a52005db22"]}},{"X":48331,"Y":-17772,"data":{"parent":["11994a55-38a2-4573-9c75-b0a52005db22"]}}]],[[{"X":1583,"Y":-65032,"data":{"parent":["97cd834a-c1c5-44be-ae13-e25985de7eb5"]}},{"X":-5030,"Y":-49813,"data":{"parent":["97cd834a-c1c5-44be-ae13-e25985de7eb5"]}},{"X":-2030,"Y":-49190,"data":{"parent":["97cd834a-c1c5-44be-ae13-e25985de7eb5"]}},{"X":3045,"Y":-60869,"data":{"parent":["97cd834a-c1c5-44be-ae13-e25985de7eb5"]}}]],[[{"X":32492,"Y":-48725,"data":{"parent":["526193f5-816d-4881-833b-fafe3b6070ae"]}},{"X":1583,"Y":-65032,"data":{"parent":["526193f5-816d-4881-833b-fafe3b6070ae"]}},{"X":3045,"Y":-60869,"data":{"parent":["526193f5-816d-4881-833b-fafe3b6070ae"]}},{"X":33348,"Y":-44882,"data":{"parent":["526193f5-816d-4881-833b-fafe3b6070ae"]}}]],[[{"X":49910,"Y":-71772,"data":{"parent":["406a3cd0-e517-4be6-b31a-408bef5c6a44"]}},{"X":32492,"Y":-48725,"data":{"parent":["406a3cd0-e517-4be6-b31a-408bef5c6a44"]}},{"X":33348,"Y":-44882,"data":{"parent":["406a3cd0-e517-4be6-b31a-408bef5c6a44"]}},{"X":50495,"Y":-67570,"data":{"parent":["406a3cd0-e517-4be6-b31a-408bef5c6a44"]}}]],[[{"X":71183,"Y":-55695,"data":{"parent":["888a7b11-3bc6-439b-bd3b-d88623170851"]}},{"X":49910,"Y":-71772,"data":{"parent":["888a7b11-3bc6-439b-bd3b-d88623170851"]}},{"X":50495,"Y":-67570,"data":{"parent":["888a7b11-3bc6-439b-bd3b-d88623170851"]}},{"X":67875,"Y":-54435,"data":{"parent":["888a7b11-3bc6-439b-bd3b-d88623170851"]}}]],[[{"X":64368,"Y":-21309,"data":{"parent":["acc16c6a-1634-4b32-a3c6-c2a5aec7cee8"]}},{"X":71183,"Y":-55695,"data":{"parent":["acc16c6a-1634-4b32-a3c6-c2a5aec7cee8"]}},{"X":67875,"Y":-54435,"data":{"parent":["acc16c6a-1634-4b32-a3c6-c2a5aec7cee8"]}},{"X":61806,"Y":-23815,"data":{"parent":["acc16c6a-1634-4b32-a3c6-c2a5aec7cee8"]}}]],[[{"X":30061,"Y":-13719,"data":{"parent":["daf7df54-024d-4399-8c40-a375ce866e6d"]}},{"X":64368,"Y":-21309,"data":{"parent":["daf7df54-024d-4399-8c40-a375ce866e6d"]}},{"X":61806,"Y":-23815,"data":{"parent":["daf7df54-024d-4399-8c40-a375ce866e6d"]}},{"X":29935,"Y":-16764,"data":{"parent":["daf7df54-024d-4399-8c40-a375ce866e6d"]}}]],[[{"X":-5030,"Y":-18470,"data":{"parent":["bf5517e6-5230-4c93-a6a6-9e141e27f541"]}},{"X":30061,"Y":-13719,"data":{"parent":["bf5517e6-5230-4c93-a6a6-9e141e27f541"]}},{"X":29935,"Y":-16764,"data":{"parent":["bf5517e6-5230-4c93-a6a6-9e141e27f541"]}},{"X":-2030,"Y":-21091,"data":{"parent":["bf5517e6-5230-4c93-a6a6-9e141e27f541"]}}]],[[{"X":-5030,"Y":-49813,"data":{"parent":["52ebdcb7-7a18-4e34-ad94-0ea3fe7b5fbd"]}},{"X":-5030,"Y":-18470,"data":{"parent":["52ebdcb7-7a18-4e34-ad94-0ea3fe7b5fbd"]}},{"X":-2030,"Y":-21091,"data":{"parent":["52ebdcb7-7a18-4e34-ad94-0ea3fe7b5fbd"]}},{"X":-2030,"Y":-49190,"data":{"parent":["52ebdcb7-7a18-4e34-ad94-0ea3fe7b5fbd"]}}]],[[{"X":8100,"Y":19300,"data":{"parent":["914e9cae-ae44-4e24-9461-715999d5a989"]}},{"X":-21900,"Y":19300,"data":{"parent":["914e9cae-ae44-4e24-9461-715999d5a989"]}},{"X":-18900,"Y":22300,"data":{"parent":["914e9cae-ae44-4e24-9461-715999d5a989"]}},{"X":5100,"Y":22300,"data":{"parent":["914e9cae-ae44-4e24-9461-715999d5a989"]}}]],[[{"X":8100,"Y":42700,"data":{"parent":["1b1bc69b-cbb5-4211-a5d9-3399f0b26364"]}},{"X":8100,"Y":19300,"data":{"parent":["1b1bc69b-cbb5-4211-a5d9-3399f0b26364"]}},{"X":5100,"Y":22300,"data":{"parent":["1b1bc69b-cbb5-4211-a5d9-3399f0b26364"]}},{"X":5100,"Y":39700,"data":{"parent":["1b1bc69b-cbb5-4211-a5d9-3399f0b26364"]}}]],[[{"X":-21900,"Y":42700,"data":{"parent":["95ff1f4a-91f2-4c3e-ab52-36ab41cf26c0"]}},{"X":8100,"Y":42700,"data":{"parent":["95ff1f4a-91f2-4c3e-ab52-36ab41cf26c0"]}},{"X":5100,"Y":39700,"data":{"parent":["95ff1f4a-91f2-4c3e-ab52-36ab41cf26c0"]}},{"X":-18900,"Y":39700,"data":{"parent":["95ff1f4a-91f2-4c3e-ab52-36ab41cf26c0"]}}]],[[{"X":-21900,"Y":19300,"data":{"parent":["90bdf90b-95c7-464d-826b-085599b712c4"]}},{"X":-21900,"Y":42700,"data":{"parent":["90bdf90b-95c7-464d-826b-085599b712c4"]}},{"X":-18900,"Y":39700,"data":{"parent":["90bdf90b-95c7-464d-826b-085599b712c4"]}},{"X":-18900,"Y":22300,"data":{"parent":["90bdf90b-95c7-464d-826b-085599b712c4"]}}]],[[{"X":41210,"Y":-1600,"data":{"parent":["154c4209-4693-4f7e-8864-24e0fc99688e"]}},{"X":24790,"Y":-1600,"data":{"parent":["154c4209-4693-4f7e-8864-24e0fc99688e"]}},{"X":24790,"Y":1400,"data":{"parent":["154c4209-4693-4f7e-8864-24e0fc99688e"]}},{"X":41210,"Y":1400,"data":{"parent":["154c4209-4693-4f7e-8864-24e0fc99688e"]}}]],[[{"X":21800,"Y":-9410,"data":{"parent":["9d7e502f-d173-4c95-8817-9f0368e5325c"]}},{"X":21800,"Y":15410,"data":{"parent":["9d7e502f-d173-4c95-8817-9f0368e5325c"]}},{"X":24800,"Y":15410,"data":{"parent":["9d7e502f-d173-4c95-8817-9f0368e5325c"]}},{"X":24800,"Y":-9410,"data":{"parent":["9d7e502f-d173-4c95-8817-9f0368e5325c"]}}]],[[{"X":-1300,"Y":14100,"data":{"parent":["7939a8c4-ac93-43bc-b2a7-296a27886439"]}},{"X":17510,"Y":14100,"data":{"parent":["7939a8c4-ac93-43bc-b2a7-296a27886439"]}},{"X":17510,"Y":11100,"data":{"parent":["7939a8c4-ac93-43bc-b2a7-296a27886439"]}},{"X":1700,"Y":11100,"data":{"parent":["7939a8c4-ac93-43bc-b2a7-296a27886439"]}}]],[[{"X":-1300,"Y":-9410,"data":{"parent":["2079b652-4be7-4303-b3aa-b4ec6a8bca72"]}},{"X":-1300,"Y":14100,"data":{"parent":["2079b652-4be7-4303-b3aa-b4ec6a8bca72"]}},{"X":1700,"Y":11100,"data":{"parent":["2079b652-4be7-4303-b3aa-b4ec6a8bca72"]}},{"X":1700,"Y":-9410,"data":{"parent":["2079b652-4be7-4303-b3aa-b4ec6a8bca72"]}}]],[[{"X":-8400,"Y":11900,"data":{"parent":["2dc690ce-59dd-420c-827d-417218176f25"]}},{"X":-8400,"Y":-9410,"data":{"parent":["2dc690ce-59dd-420c-827d-417218176f25"]}},{"X":-11400,"Y":-9410,"data":{"parent":["2dc690ce-59dd-420c-827d-417218176f25"]}},{"X":-11400,"Y":8900,"data":{"parent":["2dc690ce-59dd-420c-827d-417218176f25"]}}]],[[{"X":-32150,"Y":11900,"data":{"parent":["02ded316-bf5b-44d5-85bb-b2345879de38"]}},{"X":-8400,"Y":11900,"data":{"parent":["02ded316-bf5b-44d5-85bb-b2345879de38"]}},{"X":-11400,"Y":8900,"data":{"parent":["02ded316-bf5b-44d5-85bb-b2345879de38"]}},{"X":-29150,"Y":8900,"data":{"parent":["02ded316-bf5b-44d5-85bb-b2345879de38"]}}]],[[{"X":-32150,"Y":-9410,"data":{"parent":["77af0140-bc7d-4f9f-b405-fcfda5c645a3"]}},{"X":-32150,"Y":11900,"data":{"parent":["77af0140-bc7d-4f9f-b405-fcfda5c645a3"]}},{"X":-29150,"Y":8900,"data":{"parent":["77af0140-bc7d-4f9f-b405-fcfda5c645a3"]}},{"X":-29150,"Y":-9410,"data":{"parent":["77af0140-bc7d-4f9f-b405-fcfda5c645a3"]}}]]]');
-
-       let mergeResult = new clipperLib.PolyTree();
-
-        const cpr = new clipperLib.Clipper(clipperLib.Clipper.ioPreserveCollinear);
-
-        const subjectFillType = clipperLib.PolyFillType.pftNonZero;
-        let clipFillType = clipperLib.PolyFillType.pftNonZero;
-
-        cpr.Clear();
-        for (let i = 0; i < pathsP.length; i++) {
-            const path = pathsP[i];
-            clipperLib.JS.ScaleUpPaths(path, 1000);
-            cpr.AddPaths(path, clipperLib.PolyType.ptClip, true);
-        }
-        cpr.Execute(clipperLib.ClipType.ctUnion, mergeResult, subjectFillType, clipFillType);
-
-        debugger;
-
-    // const tests= holes.getData(clipperLib.ClipType.ctXor);
-    // for(let i in tests.tests){
-    //   drawscript.checkTest( tests,i,ctx1,ctx2);
-    //   debugger;
-    // }
+    const tests= holes.getData(clipperLib.ClipType.ctUnion,true);
+    for(let i in tests.tests){
+      drawscript.checkTest( tests,i,ctx1,ctx2);
+    }
 
 
 },
