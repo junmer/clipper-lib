@@ -185,20 +185,13 @@ getData:function(operation, fromKaza  = false){
       holes = holegen._getHoles();
   }
   holes = holegen.flipHoles(holes);
-  console.log(holes)
   holegen._appendParrents(holes);
-  console.log("HOLES");
-  for(let i in holes){
-    console.log("index: ",i);
-    console.log(holes[i]);
-  }
 
   const concatHoles = [];
   for(let i in holes){
     concatHoles.push( ...holes[i] );
   }
   let tests = holegen._getCombinations(holes,operation);
-  // tests= [tests[0]];
   return {holes,concatHoles,tests};
 
 },

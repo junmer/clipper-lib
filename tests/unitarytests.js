@@ -6,12 +6,10 @@ const assert = require('assert');
 const lodash = require("lodash");
 const clipperLib = require("../clipper.js")
 
-console.log("HOLES: ", holes);
 
 function isOkPoint(pointOut, pathIn) {
 
   if(!pointOut.data){
-    console.log("NO DATA point", pointOut);
     return false;
   }
 
@@ -25,15 +23,6 @@ function isOkPoint(pointOut, pathIn) {
   const parents = matchCoords.filter( pt => lodash.intersection(pt.data.parent, pointOut.data.parent).length > 0);
 
   if(matchCoords.length > 0 && parents.length === 0){
-      console.log("point", pointOut);
-      console.log("PARENTS:", parents.length);
-      for(let i = 0;i < parents.length;i++){
-        console.log(parents[i]);
-      }
-      console.log("MATCH-COORDS:", matchCoords.length);
-      for(let i = 0;i < matchCoords.length;i++){
-        console.log(matchCoords[i]);
-      }
       return false;
   }
   return true;
@@ -104,10 +93,6 @@ function getTests(){
   const operations = [clipperLib.ClipType.ctUnion,clipperLib.ClipType.ctXor, clipperLib.ClipType.ctIntersection,clipperLib.ClipType.ctDifference];
   const polyFlags = [false,true];
   const kazaflags = [false,true];
-
-  // const operations = [clipperLib.ClipType.ctDifference]
-  // const polyFlags = [false];
-  // const kazaflags = [false];
 
   const res =[];
   for(let i in kazaflags){

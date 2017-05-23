@@ -4705,7 +4705,6 @@
     {
       e.PrevInSEL = e.PrevInAEL;
       e.NextInSEL = e.NextInAEL;
-      // e.Curr.X = ClipperLib.Clipper.TopX(e, topY);
       const newPoint = new ClipperLib.IntPoint( ClipperLib.Clipper.TopX(e, topY), e.Curr.Y);
       this.mergePointData(newPoint,e.Curr);
       e.Curr.X= newPoint.X;
