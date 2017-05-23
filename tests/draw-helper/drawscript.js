@@ -19,15 +19,21 @@ chooseColor: function (point){
   let color = [0,0,0];
   point.data.parent.forEach( elt => {
     if(!colorMap[elt]) return;
-    for(let i in colorMap[elt]){
-      color[i] = (color[i] + colorMap[elt][i])%256;
+    if(elt instanceof Number) {
+      for(let i in colorMap[elt]){
+        color[i] = (color[i] + Object.values(colorMap)[elt][i])%256;
+      }
+    } else{
+      for(let i in colorMap[elt]){
+        color[i] = (color[i] + colorMap[elt][i])%256;
+      }
     }
   });
   return "rgb("+color[0]+","+color[1]+","+color[2]+")";
 },
 
 drawPaths: function (ctx,paths, position) {
-  ctx.clearRect(0, 0, 1200, 400);
+  ctx.clearRect(0, 0, 1200, 1000);
   for(let i in paths ){
     drawscript.drawPath(ctx, paths[i],position)
   }
@@ -74,11 +80,12 @@ drawPath:function (ctx, pathToDraw, position) {
 },
 
 checkTest:function ( tests,index,ctxIn,ctxOut){
-  if(index!=2){return}
+  if(index!=8){return}
+  const pt ={X:0,Y:100};
   const test = tests.tests[index];
-    drawscript.drawPaths(ctxIn,test.subj.concat(test.clip));
-  let res = holes.getTestResult(test,true);
-    drawscript.drawPaths(ctxOut,res);
+    drawscript.drawPaths(ctxIn,test.subj.concat(test.clip),pt);
+  let res = holes.getTestResult(test,false);
+    drawscript.drawPaths(ctxOut,res,pt);
 
     ctxIn.font = "30px Arial";
     ctxIn.fillText("INDEX: "+index,10,50);

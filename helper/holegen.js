@@ -27,6 +27,7 @@ var holegen = {
   }
   cpr.Execute(options.clipType, res, options.subjectFill, options.clipFill);
 
+  debugger;
   if(!polyTree) {return holegen.simplifyPaths(res) ;}
   return holegen.simplifyPaths(clipperLib.Clipper.PolyTreeToPaths(res));
 },
@@ -134,6 +135,14 @@ _getKazaHoles:function(operation){
   };
 },
 
+flipHoles:function(holes) {
+  return Object.values(holes).reduce( (res,hole)=> [
+        ...res,
+        hole,
+        hole.map( pt => ({X:pt.X,Y:-pt.Y}))
+      ], []
+    );
+},
 
 _getCombinations:function(holes,operation) {
   const res = [];
@@ -175,8 +184,14 @@ getData:function(operation, fromKaza  = false){
   } else{
       holes = holegen._getHoles();
   }
+  holes = holegen.flipHoles(holes);
+  console.log(holes)
   holegen._appendParrents(holes);
-  console.log("HOLES", holes);
+  console.log("HOLES");
+  for(let i in holes){
+    console.log("index: ",i);
+    console.log(holes[i]);
+  }
 
   const concatHoles = [];
   for(let i in holes){
