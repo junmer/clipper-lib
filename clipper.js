@@ -2102,6 +2102,7 @@
         this.Y = 0;
       }
     }
+
   };
   ClipperLib.IntPoint.op_Equality = function (a, b)
   {
@@ -2342,6 +2343,7 @@
     this.m_MinimaList = null;
     this.m_CurrentLM = null;
     this.m_edges = new Array();
+    this.mapData = {};
     this.m_UseFullRange = false;
     this.m_HasOpenPaths = false;
     this.PreserveCollinear = false;
@@ -2416,6 +2418,56 @@
     }
     return false;
   };
+  ClipperLib.ClipperBase.prototype.mergePointData = function(newPoint, ptA,ptB){
+    if(this.mapData[newPoint.Y]&&this.mapData[newPoint.Y][newPoint.X]) return;
+    const dataA = this.getDataFromMap(ptA)
+    const dataB = this.getDataFromMap(ptB);
+    this.initData(newPoint, dataA);
+    this.initData(newPoint, dataB);
+  };
+
+  ClipperLib.ClipperBase.prototype.initData= function(point, data){
+    if(!data) return;
+      const yMatch = this.mapData[point.Y];
+      let resData;
+      if(!yMatch){
+        this.mapData[point.Y]= {};
+        this.mapData[point.Y][point.X] = JSON.parse(JSON.stringify(data));
+        return;
+    }
+    let xMatch = this.mapData[point.Y][point.X];
+    if(!xMatch) {
+      this.mapData[point.Y][point.X] = JSON.parse(JSON.stringify(data));
+    }
+    else {
+      this.initMergeData(this.mapData[point.Y][point.X],data);
+    }
+  };
+
+  ClipperLib.ClipperBase.prototype.initMergeData = function(oldData,newData){
+    if(newData === oldData) return;
+    Object.keys(newData).forEach(key => {
+      if(newData[key] === oldData[key]) return;
+      if(oldData[key] && oldData[key] instanceof Array) {
+        for(let i in newData[key]){
+          oldData[key].push(...newData[key]);
+          oldData[key]= Array.from(new Set(oldData[key]));
+        }
+        return;
+      }
+      oldData[key]=newData[key];
+    });
+  };
+  ClipperLib.ClipperBase.prototype.getDataFromMap = function(pt){
+    if(!pt) return;
+    let yMatch = this.mapData[pt.Y];
+    if(yMatch){ return yMatch[pt.X];}
+  };
+
+  ClipperLib.ClipperBase.prototype.setData = function(pt){
+    pt.data= this.getDataFromMap(pt);
+  };
+
   ClipperLib.ClipperBase.prototype.SlopesEqual = ClipperLib.ClipperBase.SlopesEqual = function ()
   {
     var a = arguments,
@@ -2488,6 +2540,7 @@
     ClipperLib.Clear(this.m_edges);
     this.m_UseFullRange = false;
     this.m_HasOpenPaths = false;
+    this.mapData = {};
   };
   ClipperLib.ClipperBase.prototype.DisposeLocalMinimaList = function ()
   {
@@ -2520,6 +2573,7 @@
     e.Curr.X = pt.X;
     e.Curr.Y = pt.Y;
     e.OutIdx = -1;
+    this.initData(e.Curr, pt.data);
   };
   ClipperLib.ClipperBase.prototype.InitEdge2 = function (e, polyType)
   {
@@ -2531,6 +2585,10 @@
       //e.Top = e.Next.Curr;
       e.Top.X = e.Next.Curr.X;
       e.Top.Y = e.Next.Curr.Y;
+
+      this.initData(e.Bot, e.Curr.data);
+      this.initData(e.Top, e.Next.Curr.data);
+
     }
     else
     {
@@ -2540,7 +2598,12 @@
       //e.Bot = e.Next.Curr;
       e.Bot.X = e.Next.Curr.X;
       e.Bot.Y = e.Next.Curr.Y;
+
+      this.initData(e.Top, e.Curr.data);
+      this.initData(e.Bot, e.Next.Curr.data);
     }
+
+
     this.SetDx(e);
     e.PolyTyp = polyType;
   };
@@ -2959,6 +3022,7 @@
     var tmp = e.Top.X;
     e.Top.X = e.Bot.X;
     e.Bot.X = tmp;
+
     if (use_xyz)
     {
       tmp = e.Top.Z;
@@ -4509,6 +4573,7 @@
           else if (dir == ClipperLib.Direction.dLeftToRight)
           {
             var Pt = new ClipperLib.IntPoint(e.Curr.X, horzEdge.Curr.Y);
+            this.mergePointData(Pt, e.Curr, horzEdge.Curr);
             this.IntersectEdges(horzEdge, e, Pt);
           }
           else
@@ -4640,7 +4705,9 @@
     {
       e.PrevInSEL = e.PrevInAEL;
       e.NextInSEL = e.NextInAEL;
-      e.Curr.X = ClipperLib.Clipper.TopX(e, topY);
+      const newPoint = new ClipperLib.IntPoint( ClipperLib.Clipper.TopX(e, topY), e.Curr.Y);
+      this.mergePointData(newPoint,e.Curr);
+      e.Curr.X= newPoint.X;
       e = e.NextInAEL;
     }
     //bubblesort ...
@@ -4771,10 +4838,12 @@
     var b1, b2;
     //nb: with very large coordinate values, it's possible for SlopesEqual() to
     //return false but for the edge.Dx value be equal due to double precision rounding.
+    const save = new ClipperLib.IntPoint(ip.X,ip.Y);
     if (edge1.Dx == edge2.Dx)
 		{
 			ip.Y = edge1.Curr.Y;
 			ip.X = ClipperLib.Clipper.TopX(edge1, ip.Y);
+      this.mergePointData(ip, save, edge1.Curr);
 			return;
     }
     if (edge1.Delta.X === 0)
@@ -4789,6 +4858,7 @@
         b2 = edge2.Bot.Y - (edge2.Bot.X / edge2.Dx);
         ip.Y = ClipperLib.Clipper.Round(ip.X / edge2.Dx + b2);
       }
+      this.mergePointData(ip, save, edge1.Bot);
     }
     else if (edge2.Delta.X === 0)
     {
@@ -4802,6 +4872,10 @@
         b1 = edge1.Bot.Y - (edge1.Bot.X / edge1.Dx);
         ip.Y = ClipperLib.Clipper.Round(ip.X / edge1.Dx + b1);
       }
+
+      this.mergePointData(ip, save, edge1.Bot);
+      this.mergePointData(ip, save, edge2.Bot);
+
     }
     else
     {
@@ -4813,6 +4887,8 @@
         ip.X = ClipperLib.Clipper.Round(edge1.Dx * q + b1);
       else
         ip.X = ClipperLib.Clipper.Round(edge2.Dx * q + b2);
+        this.mergePointData(ip, save, edge2.Bot);
+        this.mergePointData(ip, save, edge1.Bot);
     }
     if (ip.Y < edge1.Top.Y || ip.Y < edge2.Top.Y)
     {
@@ -4820,19 +4896,26 @@
       {
         ip.Y = edge1.Top.Y;
         ip.X = ClipperLib.Clipper.TopX(edge2, edge1.Top.Y);
+        this.mergePointData(ip, save, edge1.Top);
         return ip.X < edge1.Top.X;
       }
-      else
+      else{
         ip.Y = edge2.Top.Y;
-      if (Math.abs(edge1.Dx) < Math.abs(edge2.Dx))
+        this.mergePointData(ip, save, edge2.Top);
+      }
+      if (Math.abs(edge1.Dx) < Math.abs(edge2.Dx)){
         ip.X = ClipperLib.Clipper.TopX(edge1, ip.Y);
-      else
+      }
+      else{
         ip.X = ClipperLib.Clipper.TopX(edge2, ip.Y);
+      }
+
     }
 		//finally, don't allow 'ip' to be BELOW curr.Y (ie bottom of scanbeam) ...
 		if (ip.Y > edge1.Curr.Y)
 		{
 			ip.Y = edge1.Curr.Y;
+      this.mergePointData(ip, save, edge1.Curr);
 			//better to use the more vertical edge to derive X ...
 			if (Math.abs(edge1.Dx) > Math.abs(edge2.Dx))
 				ip.X = ClipperLib.Clipper.TopX(edge2, ip.Y);
@@ -4875,8 +4958,11 @@
         }
         else
         {
-          e.Curr.X = ClipperLib.Clipper.TopX(e, topY);
-          e.Curr.Y = topY;
+          const newPoint = new ClipperLib.IntPoint(ClipperLib.Clipper.TopX(e, topY),topY);
+          this.mergePointData(newPoint,e.Curr);
+          e.Curr.X = newPoint.X;
+          e.Curr.Y = newPoint.Y;
+
         }
         if (this.StrictlySimple)
         {
@@ -5022,6 +5108,7 @@
       var pg = new Array(cnt);
       for (var j = 0; j < cnt; j++)
       {
+        this.setData(p.Pt);
         pg[j] = p.Pt;
         p = p.Prev;
       }
@@ -5047,6 +5134,7 @@
       var op = outRec.Pts.Prev;
       for (var j = 0; j < cnt; j++)
       {
+        this.setData(op.Pt);
         pn.m_polygon[j] = op.Pt;
         op = op.Prev;
       }
@@ -5599,7 +5687,7 @@
 			var outRec = this.m_PolyOuts[i];
 			if (outRec.Pts == null || outRec.FirstLeft == null)
 				continue;
-			var firstLeft = this.ParseFirstLeft(outRec.FirstLeft);
+			var firstLeft = ClipperLib.Clipper.ParseFirstLeft(outRec.FirstLeft);
 			if (firstLeft == OldOutRec)
 			{
         if (this.Poly2ContainsPoly1(outRec.Pts, NewOutRec.Pts))
@@ -6523,14 +6611,7 @@
   };
   ClipperLib.Error = function (message)
   {
-    try
-    {
-      throw new Error(message);
-    }
-    catch (err)
-    {
-      alert(err.message);
-    }
+    throw new Error(message);
   };
   // ---------------------------------
   // JS extension by Timo 2013
@@ -6642,7 +6723,8 @@
       {
         result[j] = {
           X: polygon[i][j].X,
-          Y: polygon[i][j].Y
+          Y: polygon[i][j].Y,
+          data: polygon[i][j].data
         };
       }
       results[i] = result;
