@@ -5,6 +5,9 @@
   "files": [
     "clipper.js"
   ],
+  "keywords": [
+    "clipper"
+  ],
   "main": "clipper",
   "repository": "git://github.com/junmer/clipper-lib",
   "scripts": {
