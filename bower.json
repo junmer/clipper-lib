@@ -1,6 +1,6 @@
 {
   "name": "clipper-lib",
-  "version": "6.2.1",
+  "version": "6.4.2",
   "description": "Boolean operations and offsetting library in Javascript",
   "authors": [
     "Angus Johnson (Original library)", "Timo (Translation to JS)"
