@@ -6708,23 +6708,28 @@
 		return result;
 	};
 
-	ClipperLib.Clipper.AddPolyNodeToPaths = function (polynode, nt, paths)
-	{
+	ClipperLib.Clipper.AddPolyNodeToPaths = function (polynode, nt, paths) {
 		var match = true;
-		switch (nt)
-		{
-		case ClipperLib.Clipper.NodeType.ntOpen:
-			return;
-		case ClipperLib.Clipper.NodeType.ntClosed:
-			match = !polynode.IsOpen;
-			break;
-		default:
-			break;
+
+		switch (nt) {
+			case ClipperLib.Clipper.NodeType.ntOpen:
+				return;
+			case ClipperLib.Clipper.NodeType.ntClosed:
+				match = !polynode.IsOpen;
+				break;
+			default:
+				break;
 		}
-		if (polynode.m_polygon.length > 0 && match)
+
+		if (polynode.m_polygon.length > 0 && match) {
 			paths.push(polynode.m_polygon);
-		for (var $i3 = 0, $t3 = polynode.Childs(), $l3 = $t3.length, pn = $t3[$i3]; $i3 < $l3; $i3++, pn = $t3[$i3])
-			ClipperLib.Clipper.AddPolyNodeToPaths(pn, nt, paths);
+		}
+
+		var children = polynode.Childs();
+		var numChildren = children.length;
+		for (var childIndex = 0; childIndex < numChildren; childIndex++) {
+			ClipperLib.Clipper.AddPolyNodeToPaths(children[childIndex], nt, paths);
+		}
 	};
 
 	ClipperLib.Clipper.OpenPathsFromPolyTree = function (polytree)
