@@ -6548,8 +6548,7 @@
 		return result;
 	};
 
-	ClipperLib.Clipper.CleanPolygon = function (path, distance)
-	{
+	ClipperLib.Clipper.CleanPolygon = function (path, distance) {
 		if (typeof (distance) === "undefined") distance = 1.415;
 		//distance = proximity in units/pixels below which vertices will be stripped.
 		//Default ~= sqrt(2) so when adjacent vertices or semi-adjacent vertices have
@@ -6560,8 +6559,7 @@
 		var outPts = new Array(cnt);
 		for (var i = 0; i < cnt; ++i)
 			outPts[i] = new ClipperLib.OutPt();
-		for (var i = 0; i < cnt; ++i)
-		{
+		for (var i = 0; i < cnt; ++i) {
 			outPts[i].Pt = path[i];
 			outPts[i].Next = outPts[(i + 1) % cnt];
 			outPts[i].Next.Prev = outPts[i];
@@ -6569,35 +6567,80 @@
 		}
 		var distSqrd = distance * distance;
 		var op = outPts[0];
-		while (op.Idx === 0 && op.Next !== op.Prev)
-		{
-			if (ClipperLib.Clipper.PointsAreClose(op.Pt, op.Prev.Pt, distSqrd))
-			{
+		while (op.Idx === 0 && op.Next !== op.Prev) {
+			if (ClipperLib.Clipper.PointsAreClose(op.Pt, op.Prev.Pt, distSqrd)) {
 				op = ClipperLib.Clipper.ExcludeOp(op);
 				cnt--;
-			}
-			else if (ClipperLib.Clipper.PointsAreClose(op.Prev.Pt, op.Next.Pt, distSqrd))
-			{
+			} else if (ClipperLib.Clipper.PointsAreClose(op.Prev.Pt, op.Next.Pt, distSqrd)) {
 				ClipperLib.Clipper.ExcludeOp(op.Next);
 				op = ClipperLib.Clipper.ExcludeOp(op);
 				cnt -= 2;
-			}
-			else if (ClipperLib.Clipper.SlopesNearCollinear(op.Prev.Pt, op.Pt, op.Next.Pt, distSqrd))
-			{
-				op = ClipperLib.Clipper.ExcludeOp(op);
-				cnt--;
-			}
-			else
-			{
+			} else {
 				op.Idx = 1;
 				op = op.Next;
 			}
 		}
+
+		// We can't just merge each point in order or we can collapse curves that have small enough inter point deltas but large total curve.
+		// Imagine a very tessellated circle. As we walk the edge each triple can be collinear within our error and so we remove the middle point and move on to
+		// the next point. The new middle point is very close to the new third point and so we collapse and remove the second point. We can remove and create
+		// a large flat on the edge of the circle.
+		let removePoints = new Set();
+		let loopStart = op;
+		let first = true;
+		while ((first || op != loopStart)
+			&& op.Next != op.Prev) {
+			if (ClipperLib.Clipper.SlopesNearCollinear(op.Prev.Pt, op.Pt, op.Next.Pt, distSqrd)) {
+				// we check if the new end point is collinear with all the points we already have accumulated.
+				// and collapse all the points in between
+				let start = op.Prev; // -1
+				let firstCheck = op; // 0
+				let currentCheck = firstCheck; // 0
+				let endCheck = op.Next; // 1
+				let foundEnd = false;
+				while (!foundEnd
+					&& endCheck != start) {
+					while (currentCheck != endCheck
+						&& (first || currentCheck != loopStart)) {
+						let collinear = ClipperLib.Clipper.SlopesNearCollinear(start.Pt, currentCheck.Pt, endCheck.Pt, distSqrd);
+						if (collinear && endCheck != loopStart) {
+							if (!removePoints.has(currentCheck)) {
+								removePoints.add(currentCheck);
+							}
+							currentCheck = currentCheck.Next;
+						}
+						else {
+							// add all the points we found and we are done
+							foundEnd = true;
+							break;
+						}
+					}
+
+					if (!foundEnd) {
+						currentCheck = firstCheck;
+						endCheck = endCheck.Next;
+					}
+				}
+
+				op = endCheck;
+			}
+			else {
+				op = op.Next;
+			}
+
+			first = false;
+		}
+
+		// remove all the points that were collinear
+		removePoints.forEach(function (remove) {
+			op = ClipperLib.Clipper.ExcludeOp(remove);
+			cnt--;
+		});
+
 		if (cnt < 3)
 			cnt = 0;
 		var result = new Array(cnt);
-		for (var i = 0; i < cnt; ++i)
-		{
+		for (var i = 0; i < cnt; ++i) {
 			result[i] = new ClipperLib.IntPoint1(op.Pt);
 			op = op.Next;
 		}
@@ -6708,23 +6751,28 @@
 		return result;
 	};
 
-	ClipperLib.Clipper.AddPolyNodeToPaths = function (polynode, nt, paths)
-	{
+	ClipperLib.Clipper.AddPolyNodeToPaths = function (polynode, nt, paths) {
 		var match = true;
-		switch (nt)
-		{
-		case ClipperLib.Clipper.NodeType.ntOpen:
-			return;
-		case ClipperLib.Clipper.NodeType.ntClosed:
-			match = !polynode.IsOpen;
-			break;
-		default:
-			break;
+
+		switch (nt) {
+			case ClipperLib.Clipper.NodeType.ntOpen:
+				return;
+			case ClipperLib.Clipper.NodeType.ntClosed:
+				match = !polynode.IsOpen;
+				break;
+			default:
+				break;
 		}
-		if (polynode.m_polygon.length > 0 && match)
+
+		if (polynode.m_polygon.length > 0 && match) {
 			paths.push(polynode.m_polygon);
-		for (var $i3 = 0, $t3 = polynode.Childs(), $l3 = $t3.length, pn = $t3[$i3]; $i3 < $l3; $i3++, pn = $t3[$i3])
-			ClipperLib.Clipper.AddPolyNodeToPaths(pn, nt, paths);
+		}
+
+		var children = polynode.Childs();
+		var numChildren = children.length;
+		for (var childIndex = 0; childIndex < numChildren; childIndex++) {
+			ClipperLib.Clipper.AddPolyNodeToPaths(children[childIndex], nt, paths);
+		}
 	};
 
 	ClipperLib.Clipper.OpenPathsFromPolyTree = function (polytree)
