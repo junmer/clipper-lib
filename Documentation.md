@@ -397,7 +397,7 @@ function Main(args)
   var solution = new ClipperLib.Paths();
   var c = new ClipperLib.Clipper();
   c.AddPaths(subj, ClipperLib.PolyType.ptSubject, true);
-  c.AddPaths(clips, ClipperLib.PolyType.ptClip, true);
+  c.AddPaths(clip, ClipperLib.PolyType.ptClip, true);
   c.Execute(ClipperLib.ClipType.ctIntersection, solution);
 
   DrawPolygons(solution, 0x40808080);
