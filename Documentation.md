@@ -1261,7 +1261,7 @@ PolyTrees can also contain open paths. Open paths will always be represented by 
                 IsHole = <b>False</b>
                 ChildCount = <b>0</b>
 
-            </pre></td></tr></table>
+</pre></td></tr></table>
 
 **See also:**
 <a href="#overview">Overview</a>, <a href="#clipper">Clipper</a>, <a href="#clipperlibclipperexecute">Clipper.Execute</a>, <a href="#clipperlibpolynode">PolyNode</a>, <a href="#clipperlibclipperclosedpathsfrompolytree">ClosedPathsFromPolyTree</a>, <a href="#clipperlibclipperopenpathsfrompolytree">OpenPathsFromPolyTree</a>, <a href="#clipperlibpaths">Paths</a>
